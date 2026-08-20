@@ -1339,42 +1339,79 @@ function renderReport(htmlText, date) {
 
   if (chartCodes.length) {
     try {
-      /* 重写 Chart 构造以捕获实例（用于销毁） —— 不污染全局原型，而是在本作用域包装 */
+      /* ============================================================
+       *  Chart 脚本执行与实例捕获
+       *  关键原则：不在任何 闭包/函数作用域 中声明
+       *     const RED/GREEN/BLUE/ORANGE/GRAY/isNarrow
+       *  因为各报告脚本已自行声明这些同名 const/function，
+       *  重复声明会触发 "Identifier has already been declared" 语法错误，
+       *  导致整段 eval 抛异常，canvas 全部显示为空壳。
+       *  兼容兜底一律通过 window 属性写入（非 lexical 声明）。
+       * ============================================================ */
       const OriginalChart = window.Chart;
-      // 仅在本次执行范围内捕获
-      const sandboxCapture = () => {
-        // 使用局部变量 + 直接eval（捕获activeCharts）
-        const RED = '#e74c3c', GREEN = '#27ae60', BLUE = '#3b82f6', ORANGE = '#f59e0b', GRAY = '#9ca3af';
-        const isNarrow = () => window.innerWidth < 640;
-        // 重置Chart全局默认（和各报告头部保持一致）
-        OriginalChart.defaults.font.family = '-apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
-        OriginalChart.defaults.color = '#6b7280';
-        OriginalChart.defaults.font.size = 12;
 
-        // 劫持 Chart 构造以注册实例（保持 Chart.defaults 等不变，不new就不影响）
-        const _Chart = new Proxy(OriginalChart, {
-          construct(target, args) {
-            const inst = new target(...args);
-            activeCharts.push(inst);
-            return inst;
-          }
-        });
-
-        // 由于 script 里是 new Chart(...)，我们无法直接替换全局符号中的构造
-        // 所以改为：将脚本中所有 new Chart(...) 替换为调用一个局部构造函数
-        // 最稳妥的做法 —— 临时把window.Chart替换为捕获版
-        const saved = window.Chart;
-        window.Chart = _Chart;
-        try {
-          // eslint-disable-next-line no-eval
-          eval(chartCodes.join('\n'));
-        } finally {
-          window.Chart = saved;
+      // (A) 兼容兜底：仅当全局未定义时，通过 window 属性写入
+      //     （非 const/let/function，不会进入 lexical scope 重名冲突）
+      if (typeof window.isNarrow !== 'function') {
+        window.isNarrow = function () { return window.innerWidth < 640; };
+      }
+      (function ensurePalette() {
+        const palette = { RED:'#e74c3c', GREEN:'#27ae60', BLUE:'#3b82f6', ORANGE:'#f59e0b', GRAY:'#9ca3af' };
+        for (const k in palette) {
+          if (!(k in window)) window[k] = palette[k];
         }
-      };
-      sandboxCapture();
+      })();
+
+      // (B) Chart 默认配置重置（赋值操作，幂等）
+      OriginalChart.defaults.font.family = '-apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+      OriginalChart.defaults.color = '#6b7280';
+      OriginalChart.defaults.font.size = 12;
+
+      // (C) 合并脚本 + 防御性去重
+      // 报告可能把图表初始化拆到多个 <script>，每块都有 const RED/GREEN... 声明。
+      // 同一 eval 中重复 const 会 SyntaxError。把“第2次及以后”的同名 const
+      // 改成 window.xxx = 值，避免重复声明。
+      const combinedRaw = chartCodes.join('\n;\n');
+      const _seenDecl = new Set();
+      const sanitized = combinedRaw.replace(
+        /(^|\n)\s*(const|let)\s+([A-Z_][A-Z0-9_]*)\s*=\s*([^;\n]+?)\s*;?\s*(?=\n|$)/g,
+        function (match, prefix, kw, name, value) {
+          if (/^(RED|GREEN|BLUE|ORANGE|GRAY)$/.test(name) || name === 'isNarrow') {
+            if (_seenDecl.has(name)) {
+              // 非首次声明 → 改为 window 赋值（脱离 lexical 体系，无冲突）
+              return (prefix || '\n') + 'window.' + name + ' = (' + value.trim().replace(/;$/, '') + ');';
+            }
+            _seenDecl.add(name);
+          }
+          return match;
+        }
+      );
+
+      // (D) 劫持 Chart 构造，捕获实例以便切换时销毁
+      const _Chart = new Proxy(OriginalChart, {
+        construct(target, args) {
+          const inst = new target(...args);
+          activeCharts.push(inst);
+          return inst;
+        }
+      });
+
+      // (E) 临时替换 window.Chart → 直接 eval 源码 → 还原
+      //     必须用「直接 eval」而非 (0, eval) 间接 eval：
+      //       直接 eval 内的 const/let 作用域绑定随 renderReport 函数退出而丢弃，
+      //       切换不同日期时不会因“全局作用域已存在同名const”而报错；
+      //       间接 eval 会把 const/let 永久种在全局，切换第二次即 SyntaxError。
+      const saved = window.Chart;
+      window.Chart = _Chart;
+      try {
+        // eslint-disable-next-line no-eval
+        eval(sanitized);   // 直接 eval：本函数作用域内执行
+      } finally {
+        window.Chart = saved;
+      }
     } catch (scriptErr) {
-      console.warn('图表脚本执行失败（部分图表可能不显示）：', scriptErr);
+      console.warn('[renderReport] 图表脚本执行失败（部分图表可能不显示）：',
+                    (scriptErr && scriptErr.stack) || scriptErr);
     }
   }
 
