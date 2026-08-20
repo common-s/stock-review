@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股收盘复盘 · 资料归档</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --accent: #e74c3c;
+    --accent-dark: #c0392b;
+    --bg-page: #f0f2f5;
+    --bg-card: #ffffff;
+    --text-main: #1a1a2e;
+    --text-sub: #6b7280;
+    --border: #e5e7eb;
+    --radius: 16px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ===== 顶部导航栏 ===== */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+  }
+  .topbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .brand-logo {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 2px 8px rgba(231,76,60,0.25);
+  }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+  .brand-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
+  .brand-sub { font-size: 11px; color: var(--text-sub); letter-spacing: 0.5px; }
+
+  /* 日期选择控件 */
+  .date-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    flex-wrap: wrap;
+  }
+  .nav-btn {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .nav-btn:hover:not(:disabled) { background: #f3f4f6; border-color: #d1d5db; transform: translateY(-1px); }
+  .nav-btn:active:not(:disabled) { transform: scale(0.95); }
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .date-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .date-input-wrap input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px 8px 36px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    background: var(--bg-card);
+    color: var(--text-main);
+    cursor: pointer;
+    transition: border 0.15s;
+    width: 170px;
+  }
+  .date-input-wrap input[type="date"]:hover { border-color: #d1d5db; }
+  .date-input-wrap input[type="date"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(231,76,60,0.1); }
+  .date-input-wrap::before {
+    content: '📅';
+    position: absolute;
+    left: 12px;
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  .today-btn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--accent);
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .today-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(231,76,60,0.3); }
+  .today-btn:active { transform: scale(0.96); }
+
+  /* ===== 内容区域 ===== */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* 日期时间线（归档列表） */
+  .timeline-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 8px 4px 14px;
+  }
+  .timeline-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-sub);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .timeline-count {
+    font-size: 12px;
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 9px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .toggle-list-btn {
+    font-size: 12px;
+    color: var(--text-sub);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.15s;
+  }
+  .toggle-list-btn:hover { background: #e5e7eb; color: var(--text-main); }
+
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+  .timeline.collapsed {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    max-height: 0;
+    margin-bottom: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .date-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 10px;
+    cursor: pointer;
+    transition: all 0.18s;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .date-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+    transform: scaleX(0);
+    transition: transform 0.2s;
+    transform-origin: left;
+  }
+  .date-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.07); border-color: #d1d5db; }
+  .date-card:hover::before { transform: scaleX(1); }
+  .date-card.active {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(231,76,60,0.18);
+    background: linear-gradient(135deg, #fff5f5 0%, #fef2f2 100%);
+  }
+  .date-card.active::before { transform: scaleX(1); }
+
+  .date-card-day {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1;
+    margin-bottom: 4px;
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+  .date-card.active .date-card-day { color: var(--accent); }
+  .date-card-month {
+    font-size: 11px;
+    color: var(--text-sub);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .date-card-weekday {
+    font-size: 10px;
+    color: #9ca3af;
+  }
+  .date-card-latest {
+    position: absolute;
+    top: 6px; right: 6px;
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  /* 报告展示区 */
+  .report-frame-wrap {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    overflow: hidden;
+    position: relative;
+    min-height: 600px;
+  }
+  .report-frame-wrap.loading::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
+    animation: loading 1s ease-in-out infinite;
+  }
+  @keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  #reportFrame {
+    width: 100%;
+    min-height: calc(100vh - 260px);
+    border: none;
+    display: block;
+  }
+
+  /* 无报告提示 */
+  .empty-state {
+    padding: 80px 40px;
+    text-align: center;
+  }
+  .empty-icon { font-size: 56px; margin-bottom: 16px; }
+  .empty-title { font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+  .empty-text { font-size: 14px; color: var(--text-sub); }
+
+  /* 页脚 */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: #9ca3af;
+  }
+
+  /* 响应式 */
+  @media (max-width: 768px) {
+    .topbar-inner { padding: 10px 14px; gap: 10px; }
+    .brand { width: 100%; }
+    .date-controls { margin-left: 0; width: 100%; justify-content: space-between; }
+    .date-input-wrap input[type="date"] { width: 150px; padding: 7px 12px 7px 34px; font-size: 13px; }
+    .container { padding: 14px; }
+    .timeline { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+    .date-card { padding: 10px 8px; }
+    .date-card-day { font-size: 18px; }
+  }
+  @media (max-width: 400px) {
+    .today-btn { padding: 7px 10px; font-size: 12px; }
+    .nav-btn { width: 32px; height: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-logo">📈</div>
+      <div class="brand-text">
+        <div class="brand-title">A股收盘复盘</div>
+        <div class="brand-sub">MARKET REVIEW ARCHIVES</div>
+      </div>
+    </div>
+
+    <div class="date-controls">
+      <button class="nav-btn" id="prevBtn" title="上一交易日">◀</button>
+      <div class="date-input-wrap">
+        <input type="date" id="datePicker">
+      </div>
+      <button class="nav-btn" id="nextBtn" title="下一交易日">▶</button>
+      <button class="today-btn" id="todayBtn">最新</button>
+    </div>
+  </div>
+</div>
+
+<!-- 主内容 -->
+<div class="container">
+
+  <!-- 时间线 -->
+  <div class="timeline-header">
+    <div class="timeline-title">
+      📚 复盘归档
+      <span class="timeline-count" id="totalCount">0</span>
+    </div>
+    <button class="toggle-list-btn" id="toggleBtn">收起 ▲</button>
+  </div>
+  <div class="timeline" id="timeline"></div>
+
+  <!-- 报告 iframe -->
+  <div class="report-frame-wrap" id="frameWrap">
+    <iframe id="reportFrame" src="" title="复盘报告"></iframe>
+  </div>
+
+</div>
+
+<div class="footer">
+  A股收盘复盘系统 · 仅供参考，不构成投资建议
+</div>
+
+<script>
+// ====== 从文件名自动提取可用日期 ======
+// 可用报告列表（按文件名模式自动生成，兼容已有HTML）
+const REPORT_FILES = [
+  'A股收盘复盘报告_2026-08-07.html',
+  'A股收盘复盘报告_2026-08-10.html',
+  'A股收盘复盘报告_2026-08-11.html',
+  'A股收盘复盘报告_2026-08-12.html',
+  'A股收盘复盘报告_2026-08-13.html',
+  'A股收盘复盘报告_2026-08-14.html',
+  'A股收盘复盘报告_2026-08-17.html',
+  'A股收盘复盘报告_2026-08-18.html',
+  'A股收盘复盘报告_2026-08-19.html',
+  'A股收盘复盘报告_2026-08-20.html'
+];
+
+// 解析出日期数组（YYYY-MM-DD），按降序排列（最新在前）
+const availableDates = REPORT_FILES
+  .map(f => {
+    const m = f.match(/(\d{4}-\d{2}-\d{2})/);
+    return m ? m[1] : null;
+  })
+  .filter(Boolean)
+  .sort((a, b) => b.localeCompare(a));
+
+const WEEKDAYS = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+
+// DOM
+const datePicker = document.getElementById('datePicker');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const todayBtn = document.getElementById('todayBtn');
+const timeline = document.getElementById('timeline');
+const totalCount = document.getElementById('totalCount');
+const toggleBtn = document.getElementById('toggleBtn');
+const frameWrap = document.getElementById('frameWrap');
+const reportFrame = document.getElementById('reportFrame');
+
+let currentDate = availableDates[0]; // 默认最新
+
+// ====== 渲染时间线 ======
+function renderTimeline() {
+  totalCount.textContent = availableDates.length;
+  timeline.innerHTML = availableDates.map((date, idx) => {
+    const d = new Date(date + 'T00:00:00');
+    const month = d.getMonth() + 1;
+    const day = d.getDate();
+    const weekday = WEEKDAYS[d.getDay()];
+    const active = date === currentDate ? 'active' : '';
+    const latest = idx === 0 ? '<span class="date-card-latest">NEW</span>' : '';
+    return `
+      <div class="date-card ${active}" data-date="${date}" title="${date} ${weekday}">
+        ${latest}
+        <div class="date-card-month">${month}月</div>
+        <div class="date-card-day">${String(day).padStart(2, '0')}</div>
+        <div class="date-card-weekday">${weekday}</div>
+      </div>
+    `;
+  }).join('');
+
+  // 绑定点击
+  timeline.querySelectorAll('.date-card').forEach(card => {
+    card.addEventListener('click', () => loadDate(card.dataset.date));
+  });
+}
+
+// ====== 加载指定日期 ======
+function loadDate(date) {
+  if (!availableDates.includes(date)) {
+    alert('该日期暂无复盘报告');
+    return;
+  }
+  currentDate = date;
+  datePicker.value = date;
+
+  // 更新时间线选中态
+  timeline.querySelectorAll('.date-card').forEach(card => {
+    card.classList.toggle('active', card.dataset.date === date);
+  });
+
+  // 滚动到当前选中卡片可见
+  const activeCard = timeline.querySelector('.date-card.active');
+  if (activeCard) {
+    activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+
+  // 显示加载状态并切换 iframe
+  frameWrap.classList.add('loading');
+  const fileName = `A股收盘复盘报告_${date}.html`;
+  reportFrame.src = fileName;
+
+  reportFrame.onload = () => {
+    frameWrap.classList.remove('loading');
+  };
+  reportFrame.onerror = () => {
+    frameWrap.classList.remove('loading');
+  };
+
+  // 更新导航按钮状态
+  updateNavButtons();
+}
+
+// ====== 导航按钮 ======
+function updateNavButtons() {
+  const idx = availableDates.indexOf(currentDate);
+  prevBtn.disabled = idx >= availableDates.length - 1; // 更老的
+  nextBtn.disabled = idx <= 0; // 更新的
+}
+
+prevBtn.addEventListener('click', () => {
+  const idx = availableDates.indexOf(currentDate);
+  if (idx < availableDates.length - 1) loadDate(availableDates[idx + 1]);
+});
+nextBtn.addEventListener('click', () => {
+  const idx = availableDates.indexOf(currentDate);
+  if (idx > 0) loadDate(availableDates[idx - 1]);
+});
+todayBtn.addEventListener('click', () => loadDate(availableDates[0]));
+
+datePicker.addEventListener('change', (e) => {
+  loadDate(e.target.value);
+});
+
+// ====== 收起/展开时间线 ======
+toggleBtn.addEventListener('click', () => {
+  const collapsed = timeline.classList.toggle('collapsed');
+  toggleBtn.textContent = collapsed ? '展开 ▼' : '收起 ▲';
+});
+
+// ====== 键盘快捷键 ======
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowLeft') prevBtn.click();
+  if (e.key === 'ArrowRight') nextBtn.click();
+});
+
+// ====== 初始化 ======
+renderTimeline();
+loadDate(currentDate);
+</script>
+</body>
+</html>

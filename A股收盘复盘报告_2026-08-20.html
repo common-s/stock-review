@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A股收盘复盘报告 2026-08-20 — 缩量普涨修复，医药黄金领衔，超跌中小盘弹性释放">
+<title>A股收盘复盘报告 · 2026-08-20</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --accent: #e74c3c;
+    --accent-dark: #c0392b;
+    --positive: #e74c3c;
+    --negative: #27ae60;
+    --blue: #3b82f6;
+    --text-main: #1a1a2e;
+    --text-sub: #6b7280;
+    --text-light: #9ca3af;
+    --bg-page: #f0f2f5;
+    --bg-card: #f8f9fb;
+    --border: #eef0f4;
+    --page-pad: clamp(10px, 2.5vw, 24px);
+    --sec-pad-x: clamp(16px, 4vw, 36px);
+    --sec-pad-y: clamp(22px, 3.2vw, 32px);
+    --radius: clamp(12px, 2vw, 16px);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.6;
+    padding: var(--page-pad);
+    font-size: clamp(14px, 1.6vw, 16px);
+  }
+  .report { max-width: 1000px; margin: 0 auto; background: #ffffff; border-radius: var(--radius); box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
+  .toc { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.04); margin-bottom: clamp(10px, 1.5vw, 14px); }
+  .toc-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; gap: 4px; padding: clamp(6px, 1vw, 10px) clamp(12px, 2.5vw, 24px); overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .toc-inner::-webkit-scrollbar { display: none; }
+  .toc-label { font-size: 12px; font-weight: 700; color: var(--text-sub); margin-right: 6px; flex-shrink: 0; }
+  .toc a { text-decoration: none; color: #4b5563; font-size: clamp(12px, 1.4vw, 13px); padding: 5px 12px; border-radius: 20px; white-space: nowrap; transition: all 0.2s; flex-shrink: 0; }
+  .toc a:hover { background: #f3f4f6; color: var(--accent); }
+  .toc a:active { transform: scale(0.96); }
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #fff; padding: clamp(30px, 5.5vw, 44px) clamp(20px, 4vw, 36px) clamp(24px, 4vw, 32px); position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: clamp(140px, 25vw, 220px); height: clamp(140px, 25vw, 220px); background: radial-gradient(circle, rgba(231,76,60,0.18) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+  .header-label { font-size: clamp(11px, 1.3vw, 13px); letter-spacing: clamp(2px, 0.4vw, 3px); text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+  .header h1 { font-size: clamp(22px, 4vw, 30px); font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
+  .header .date { font-size: clamp(13px, 1.6vw, 15px); color: rgba(255,255,255,0.7); }
+  .header .badge { display: inline-block; margin-top: clamp(10px, 1.5vw, 14px); padding: 5px clamp(10px, 1.5vw, 14px); background: rgba(231,76,60,0.18); border: 1px solid rgba(231,76,60,0.4); border-radius: 20px; font-size: clamp(12px, 1.4vw, 13px); color: #ff8a80; line-height: 1.5; }
+  .section { padding: var(--sec-pad-y) var(--sec-pad-x); border-bottom: 1px solid var(--border); scroll-margin-top: 56px; }
+  .section:last-child { border-bottom: none; }
+  .section-title { display: flex; align-items: center; gap: 10px; font-size: clamp(16px, 2.2vw, 19px); font-weight: 700; color: var(--text-main); margin-bottom: clamp(14px, 2vw, 20px); }
+  .section-title .num { display: inline-flex; align-items: center; justify-content: center; width: clamp(24px, 3vw, 28px); height: clamp(24px, 3vw, 28px); border-radius: 8px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: #fff; font-size: clamp(12px, 1.5vw, 14px); font-weight: 700; flex-shrink: 0; }
+  .section-title .icon { font-size: clamp(18px, 2.4vw, 22px); }
+  .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 1.5vw, 14px); margin-bottom: clamp(14px, 2vw, 20px); }
+  .metric-card { background: var(--bg-card); border-radius: 12px; padding: clamp(13px, 1.8vw, 16px) clamp(11px, 1.5vw, 14px); border: 1px solid var(--border); transition: transform 0.2s, box-shadow 0.2s; }
+  .metric-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+  .metric-card .label { font-size: clamp(11px, 1.3vw, 12px); color: var(--text-sub); margin-bottom: 8px; line-height: 1.4; }
+  .metric-card .value { font-size: clamp(19px, 2.6vw, 22px); font-weight: 700; font-family: "SF Mono", "Fira Code", monospace; line-height: 1.3; word-break: break-word; }
+  .metric-card .delta { font-size: clamp(11px, 1.2vw, 12px); margin-top: 4px; font-weight: 600; line-height: 1.4; }
+  .metric-card.highlight { background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border-color: #fca5a5; }
+  .metric-card.recovery { background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%); border-color: #fcd34d; }
+  .up { color: var(--positive); }
+  .down { color: var(--negative); }
+  .neutral { color: var(--text-sub); }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 16px; border-radius: 8px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: clamp(12px, 1.5vw, 14px); }
+  th { background: var(--bg-card); padding: clamp(9px, 1.2vw, 12px) clamp(10px, 1.5vw, 14px); text-align: left; font-weight: 600; color: #4b5563; font-size: clamp(11px, 1.3vw, 13px); border-bottom: 2px solid #e5e7eb; white-space: nowrap; }
+  td { padding: clamp(9px, 1.2vw, 11px) clamp(10px, 1.5vw, 14px); border-bottom: 1px solid var(--border); color: #1f2937; white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafbfc; }
+  .table-wide table { min-width: 620px; }
+  .table-narrow table { min-width: 480px; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: clamp(11px, 1.2vw, 12px); font-weight: 600; white-space: nowrap; }
+  .pill-red { background: #fef2f2; color: var(--accent); }
+  .pill-green { background: #f0fdf4; color: #16a34a; }
+  .pill-gray { background: #f3f4f6; color: var(--text-sub); }
+  .pill-orange { background: #fff7ed; color: #ea580c; }
+  .pill-blue { background: #eff6ff; color: var(--blue); }
+  .pill-darkred { background: #fef2f2; color: #dc2626; }
+  .chart-container { background: var(--bg-card); border-radius: 12px; padding: clamp(14px, 2vw, 20px); margin-bottom: 16px; border: 1px solid var(--border); }
+  .chart-title { font-size: clamp(12px, 1.6vw, 14px); font-weight: 600; color: #4b5563; margin-bottom: 12px; line-height: 1.5; }
+  .chart-wrapper { position: relative; height: clamp(220px, 30vw, 280px); }
+  .chart-wrapper-sm { position: relative; height: clamp(170px, 24vw, 220px); }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 1.8vw, 16px); }
+  .alert-box { background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border-left: 4px solid #16a34a; border-radius: 8px; padding: clamp(14px, 2vw, 16px) clamp(16px, 2.4vw, 20px); margin-bottom: 16px; }
+  .alert-box .alert-title { font-size: clamp(13px, 1.5vw, 14px); font-weight: 700; color: #15803d; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .alert-box .alert-text { font-size: clamp(12px, 1.5vw, 13px); color: #166534; line-height: 1.7; }
+  .alert-box.warning { background: linear-gradient(135deg, #fff7ed 0%, #fffbeb 100%); border-left-color: #f59e0b; }
+  .alert-box.warning .alert-title { color: #b45309; }
+  .alert-box.warning .alert-text { color: #92400e; }
+  .portfolio-box { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-left: 4px solid #3b82f6; border-radius: 8px; padding: clamp(14px, 2vw, 16px) clamp(16px, 2.4vw, 20px); margin-bottom: 16px; }
+  .portfolio-box .portfolio-title { font-size: clamp(13px, 1.5vw, 14px); font-weight: 700; color: #1e40af; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .portfolio-box .portfolio-text { font-size: clamp(12px, 1.5vw, 13px); color: #1e3a8a; line-height: 1.7; }
+  .interp-card { background: var(--bg-card); border-radius: 12px; padding: clamp(16px, 2.4vw, 20px) clamp(16px, 2.8vw, 24px); margin-bottom: 14px; border: 1px solid var(--border); }
+  .interp-card h3 { font-size: clamp(14px, 1.8vw, 15px); font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; line-height: 1.5; }
+  .interp-card ul { list-style: none; padding-left: 0; }
+  .interp-card li { padding: 6px 0; font-size: clamp(13px, 1.6vw, 14px); color: #374151; padding-left: 18px; position: relative; line-height: 1.7; }
+  .interp-card li::before { content: '\25B8'; position: absolute; left: 0; color: var(--accent); }
+  .interp-card .tag { display: inline-block; padding: 1px 8px; border-radius: 6px; font-size: clamp(11px, 1.2vw, 12px); font-weight: 600; margin: 0 2px; white-space: nowrap; }
+  .disclaimer { padding: clamp(18px, 2.4vw, 20px) var(--sec-pad-x) clamp(24px, 3vw, 28px); background: var(--bg-card); text-align: center; }
+  .disclaimer p { font-size: clamp(11px, 1.3vw, 12px); color: var(--text-light); line-height: 1.8; }
+  .disclaimer .gen-time { margin-top: 8px; font-size: clamp(10px, 1.1vw, 11px); color: #c0c4cc; }
+  @media (max-width: 900px) { .metric-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } .metric-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } .metric-card .value { font-size: clamp(18px, 5vw, 22px); } .header h1 { letter-spacing: 0; } .toc { margin-bottom: 8px; } }
+  @media (max-width: 400px) { .metric-grid { grid-template-columns: 1fr; } .metric-card { padding: 12px 14px; } }
+  @media print { body { background: #fff; padding: 0; } .report { box-shadow: none; border-radius: 0; } .toc { display: none; } .metric-card:hover { transform: none; box-shadow: none; } }
+</style>
+</head>
+<body>
+
+<nav class="toc" aria-label="章节导航">
+  <div class="toc-inner">
+    <span class="toc-label">📑 目录</span>
+    <a href="#sec1">🌡️ 情绪体温计</a>
+    <a href="#sec2">🏆 风格排名</a>
+    <a href="#sec3">💧 流动性</a>
+    <a href="#sec4">📝 行情解读</a>
+  </div>
+</nav>
+
+<div class="report">
+
+  <div class="header">
+    <div class="header-label">A-SHARE MARKET REVIEW</div>
+    <h1>A股收盘复盘报告</h1>
+    <div class="date">2026年8月20日 · 星期四</div>
+    <div class="badge">📈 缩量普涨修复 · 医药黄金领衔 · 超跌中小盘弹性释放</div>
+  </div>
+
+  <!-- ===== Section 1 ===== -->
+  <div class="section" id="sec1">
+    <div class="section-title">
+      <span class="num">1</span>
+      <span class="icon">🌡️</span>
+      全市场情绪体温计（含持仓收益）
+    </div>
+
+    <div class="alert-box">
+      <div class="alert-title">📈 缩量普涨修复 — 恐慌暂歇</div>
+      <div class="alert-text">
+        今日市场迎来缩量普涨修复。中位数 <b>+0.17%</b>，沪深300微涨 <b>+0.09%</b>，全市场近 <b>4100只</b>个股上涨（占比约75%），较昨日极端普跌（仅449只上涨）显著回暖。持仓收益 <b>+0.05%</b>，较昨日 <b>-5.63%</b> 大幅修复，超额收益由 <b>-1.70%</b> 收窄至 <b>-0.12%</b>。
+      </div>
+    </div>
+
+    <div class="metric-grid">
+      <div class="metric-card recovery">
+        <div class="label">个股涨跌幅中位数</div>
+        <div class="value up">+0.17%</div>
+        <div class="delta up">↑ +4.10pp vs 前日</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">沪深300加权指数</div>
+        <div class="value up">+0.09%</div>
+        <div class="delta up">↑ +2.99pp vs 前日</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">指数失真剪刀差</div>
+        <div class="value up">+0.08%</div>
+        <div class="delta up">↑ +1.11pp vs 前日</div>
+      </div>
+      <div class="metric-card recovery">
+        <div class="label">📊 持仓收益率</div>
+        <div class="value up">+0.05%</div>
+        <div class="delta up">↑ +5.68pp vs 前日</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">超额收益（持仓−中位数）</div>
+        <div class="value down">-0.12%</div>
+        <div class="delta up">↑ +1.58pp vs 前日</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">赚钱效应评级</div>
+        <div class="value" style="font-size:clamp(13px,2vw,15px);color:#ea580c;">⚠️ 弱普涨</div>
+        <div class="delta neutral">近4100涨 · 上涨占比约75%</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">📊 中位数 vs 持仓收益 vs 沪深300 — 前日(8/19)与今日(8/20)对比</div>
+      <div class="chart-wrapper-sm">
+        <canvas id="divergenceChart"></canvas>
+      </div>
+    </div>
+
+    <div class="portfolio-box">
+      <div class="portfolio-title">📊 持仓收益分析</div>
+      <div class="portfolio-text">
+        您今日持仓收益 <b>+0.05%</b>，跑输全市场中位数 <b>+0.17%</b> 共 <b>0.12个百分点</b>，但较昨日 <b>-5.63%</b> 已有大幅修复，超额收益由 <b>-1.70%</b> 收窄至 <b>-0.12%</b>。持仓修复力度略弱于市场平均，建议关注持仓中是否仍持有昨日跌幅较大、今日反弹乏力的品种。
+      </div>
+    </div>
+
+    <div class="alert-box warning">
+      <div class="alert-title">⚠️ 核心信号</div>
+      <div class="alert-text">
+        今日市场迎来缩量普涨修复。中位数 <b>+0.17%</b>，沪深300微涨 <b>+0.09%</b>，剪刀差为 <b>+0.08%</b>，说明个股与权重基本同步。全市场近4100只个股上涨，赚钱效应较昨日极端普跌显著回暖。您的持仓收益 <b>+0.05%</b>，跑输中位数 <b>0.12个百分点</b>，但超额收益已大幅收窄。
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Section 2 ===== -->
+  <div class="section" id="sec2">
+    <div class="section-title">
+      <span class="num">2</span>
+      <span class="icon">🏆</span>
+      风格强弱排名
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">🥇 最强 vs 🥉 最弱 — 今日涨跌幅对比（科创独跌）</div>
+      <div class="chart-wrapper">
+        <canvas id="styleChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">🔄 关键指数：前日(8/19) vs 今日(8/20) — "超跌反弹，中小盘弹性释放"</div>
+      <div class="chart-wrapper-sm">
+        <canvas id="reversalChart"></canvas>
+      </div>
+    </div>
+
+    <div class="table-wrap table-wide">
+      <table>
+        <thead>
+          <tr>
+            <th>排名</th>
+            <th>指数</th>
+            <th>今日涨跌幅</th>
+            <th>前日涨跌幅(8/19)</th>
+            <th>环比变化</th>
+            <th>收盘价</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pill pill-red">🥇 最强</span></td>
+            <td><b>中证1000</b></td>
+            <td class="up"><b>+0.96%</b></td>
+            <td class="down">-5.39%</td>
+            <td class="up">+6.35pp</td>
+            <td>7,589.78</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-red">🥈 最强</span></td>
+            <td><b>中证500</b></td>
+            <td class="up"><b>+0.86%</b></td>
+            <td class="down">-4.81%</td>
+            <td class="up">+5.67pp</td>
+            <td>7,850.40</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-red">🥉 最强</span></td>
+            <td><b>创业板指</b></td>
+            <td class="up"><b>+0.64%</b></td>
+            <td class="down">-6.26%</td>
+            <td class="up">+6.90pp</td>
+            <td>3,495.59</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-green">🥇 最弱</span></td>
+            <td><b>科创50</b></td>
+            <td class="down"><b>-0.87%</b></td>
+            <td class="down">-6.89%</td>
+            <td class="up">+6.02pp</td>
+            <td>1,652.97</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-green">🥈 最弱</span></td>
+            <td><b>北证50</b></td>
+            <td class="down"><b>-0.06%</b></td>
+            <td class="down">-4.89%</td>
+            <td class="up">+4.83pp</td>
+            <td>1,081.58</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-green">🥉 最弱</span></td>
+            <td><b>沪深300</b></td>
+            <td class="up"><b>+0.09%</b></td>
+            <td class="down">-2.90%</td>
+            <td class="up">+2.99pp</td>
+            <td>4,592.75</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:20px;">
+      <div class="chart-title" style="margin-bottom:10px;">📋 其他主要指数一览</div>
+      <div class="table-wrap table-narrow">
+        <table>
+          <thead>
+            <tr>
+              <th>指数</th>
+              <th>今日涨跌幅</th>
+              <th>收盘价/点位</th>
+              <th>成交额</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>上证指数</td><td class="up"><b>+0.24%</b></td><td>3,903.72</td><td>10,186亿</td></tr>
+            <tr><td>深证成指</td><td class="up"><b>+0.59%</b></td><td>13,972.78</td><td>10,608亿</td></tr>
+            <tr><td>沪深300</td><td class="up"><b>+0.09%</b></td><td>4,592.75</td><td>—</td></tr>
+            <tr><td>科创50</td><td class="down"><b>-0.87%</b></td><td>1,652.97</td><td>—</td></tr>
+            <tr><td>创业板指</td><td class="up"><b>+0.64%</b></td><td>3,495.59</td><td>5,260亿</td></tr>
+            <tr><td>中证500</td><td class="up"><b>+0.86%</b></td><td>7,850.40</td><td>—</td></tr>
+            <tr><td>中证1000</td><td class="up"><b>+0.96%</b></td><td>7,589.78</td><td>—</td></tr>
+            <tr><td>北证50</td><td class="down"><b>-0.06%</b></td><td>1,081.58</td><td>—</td></tr>
+            <tr><td>恒生指数</td><td class="up"><b>+1.05%</b></td><td>25,763</td><td>2,245亿港元</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="alert-box warning">
+      <div class="alert-title">📊 中小盘强于大盘，科创独跌</div>
+      <div class="alert-text">
+        <b>中小盘明显强于大盘</b>——中证1000（<b>+0.96%</b>）和中证500（<b>+0.86%</b>）领涨，反映超跌后中小盘弹性更大。科创50（<b>-0.87%</b>）逆势独跌，是今日唯一下跌的主要宽基指数，半导体硅片、半导体材料等相关概念股下挫。恒生指数大涨 <b>+1.05%</b>，与A股形成共振。
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Section 3 ===== -->
+  <div class="section" id="sec3">
+    <div class="section-title">
+      <span class="num">3</span>
+      <span class="icon">💧</span>
+      流动性异动警报
+    </div>
+
+    <div class="two-col">
+      <div class="metric-card" style="text-align:center;padding:clamp(18px,2.5vw,24px);">
+        <div class="label" style="font-size:clamp(13px,1.6vw,14px);">沪深两市合计成交额</div>
+        <div class="value neutral" style="font-size:clamp(24px,4vw,30px);margin:10px 0;">2.09万亿</div>
+        <div class="delta down">↓ 缩量约4,361亿 (-17.2%) vs 前日</div>
+      </div>
+      <div class="chart-container" style="margin-bottom:0;">
+        <div class="chart-title">成交额对比</div>
+        <div class="chart-wrapper-sm">
+          <canvas id="volumeChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert-box warning" style="margin-top:16px;">
+      <div class="alert-title">⚠️ 缩量反弹 — 急跌后技术性修复，非趋势反转</div>
+      <div class="alert-text">
+        成交额显著缩量，较前日减少约 <b>4,361亿</b>（<b>-17.2%</b>）。<b>缩量 + 普涨 + 近4100股上涨</b>的组合，说明恐慌性抛售已基本结束，市场进入缩量修复阶段；增量资金仍未大规模入场，属存量资金的自发反弹；医药生物、贵金属等题材板块成为反弹主力，但量能不足以支撑全面持续上攻。历史上急跌后的缩量反弹，常伴随二次探底风险，需关注后续能否补量确认底部。
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Section 4 ===== -->
+  <div class="section" id="sec4">
+    <div class="section-title">
+      <span class="num">4</span>
+      <span class="icon">📝</span>
+      今日行情简要解读
+    </div>
+
+    <div class="interp-card">
+      <h3>📈 缩量普涨修复，医药黄金领衔，超跌中小盘弹性释放</h3>
+      <ul>
+        <li><b>医药板块全面爆发</b>：生物疫苗板块掀涨停潮，石药创新、康希诺、智飞生物等20cm涨停。消息面上，默沙东和莫德纳的mRNA皮肤癌疫苗在最后阶段临床试验取得积极结果，被专家视为"重大突破"。</li>
+        <li><b>贵金属板块大涨</b>：国际金价一度冲破 <b>4500美元</b>，山东黄金涨超 <span class="tag pill-red">+8%</span>，赤峰黄金涨超 <span class="tag pill-red">+7%</span>。美债收益率下跌、美元走低推动金价大涨。</li>
+        <li><b>房地产午后异动</b>：上海出台楼市"沪八条"，城投控股2秒钟直线涨停，京投发展、福星股份等多股跟涨。</li>
+        <li><b>宇树科技继续大跌</b>：上市次日跌超 <span class="tag pill-green">-18%</span>，收报687元。</li>
+        <li><b>超跌中小盘弹性释放</b>：昨日跌幅最大的中证1000（<span class="tag pill-green">-5.39%</span>）和创业板指（<span class="tag pill-green">-6.26%</span>）今日反弹力度最强，"昨日最弱即今日最强"特征明显。</li>
+        <li><b>持仓收益小幅跑输中位数</b>：您今日持仓收益 <span class="tag pill-red">+0.05%</span>，略低于全市场中位数 <span class="tag pill-red">+0.17%</span>，超额为 <span class="tag pill-green">-0.12%</span>，较昨日的 <span class="tag pill-green">-1.70%</span> 已大幅收窄。建议关注持仓中是否仍持有昨日跌幅较大、今日反弹乏力的品种。</li>
+        <li><b>缩量反弹信号需警惕</b>：两市成交缩至 <b>2.09万亿</b>，较前日缩量超4,300亿。缩量+普涨说明反弹力度有限，属急跌后的技术性修复，而非趋势反转。若后续成交无法有效放大至2.3万亿以上，市场存在二次探底可能。</li>
+      </ul>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">📈 主要指数今日涨跌幅一览 — 缩量修复全景</div>
+      <div class="chart-wrapper">
+        <canvas id="allIndexChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <p>⚠️ 以上数据来源于公开市场信息及用户提供，仅供参考，不构成投资建议。持仓收益对比仅为客观展示，不构成操作建议。缩量反弹后市场仍存在不确定性，建议关注后续量能变化及政策面动向。</p>
+    <div class="gen-time">报告生成时间：2026-08-20 · A股收盘复盘系统</div>
+  </div>
+
+</div>
+
+<script>
+Chart.defaults.font.family = '-apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+Chart.defaults.color = '#6b7280';
+Chart.defaults.font.size = 12;
+
+const RED = '#e74c3c';
+const GREEN = '#27ae60';
+const BLUE = '#3b82f6';
+const ORANGE = '#f59e0b';
+const GRAY = '#9ca3af';
+
+function isNarrow() { return window.innerWidth < 640; }
+
+// ===== 1. Divergence Chart =====
+new Chart(document.getElementById('divergenceChart'), {
+  type: 'bar',
+  data: {
+    labels: ['前日 (8/19)', '今日 (8/20)'],
+    datasets: [{
+      label: '中位数涨跌幅',
+      data: [-3.93, 0.17],
+      backgroundColor: [GREEN, RED],
+      borderRadius: 6,
+      barPercentage: 0.25,
+    }, {
+      label: '持仓收益率',
+      data: [-5.63, 0.05],
+      backgroundColor: [GREEN, RED],
+      borderRadius: 6,
+      barPercentage: 0.25,
+    }, {
+      label: '沪深300',
+      data: [-2.90, 0.09],
+      backgroundColor: [GREEN, RED],
+      borderRadius: 6,
+      barPercentage: 0.25,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: isNarrow() ? 'bottom' : 'top',
+        labels: { boxWidth: 10, padding: isNarrow() ? 6 : 12, font: { size: isNarrow() ? 10 : 12 } }
+      },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y === null ? '待核实' : ctx.parsed.y.toFixed(2) + '%') } }
+    },
+    scales: {
+      y: {
+        ticks: { callback: v => v + '%', font: { size: isNarrow() ? 10 : 12 } },
+        grid: { color: '#f0f2f5' }
+      }
+    }
+  }
+});
+
+// ===== 2. Style Ranking Chart =====
+new Chart(document.getElementById('styleChart'), {
+  type: 'bar',
+  data: {
+    labels: ['沪深300', '北证50', '上证指数', '深证成指', '创业板指', '中证500', '中证1000', '科创50'],
+    datasets: [{
+      label: '今日涨跌幅',
+      data: [0.09, -0.06, 0.24, 0.59, 0.64, 0.86, 0.96, -0.87],
+      backgroundColor: function(ctx) {
+        const v = ctx.parsed.x;
+        return v >= 0 ? RED : GREEN;
+      },
+      borderRadius: 6,
+      barPercentage: 0.6,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => '涨跌幅: ' + ctx.parsed.x.toFixed(2) + '%' } }
+    },
+    scales: {
+      x: {
+        ticks: { callback: v => v + '%', font: { size: isNarrow() ? 10 : 12 } },
+        grid: { color: '#f0f2f5' }
+      },
+      y: { grid: { display: false }, ticks: { font: { size: isNarrow() ? 10 : 12 } } }
+    }
+  }
+});
+
+// ===== 2b. Reversal Chart =====
+new Chart(document.getElementById('reversalChart'), {
+  type: 'bar',
+  data: {
+    labels: ['上证指数', '深证成指', '沪深300', '科创50', '创业板指', '中证500', '中证1000', '北证50'],
+    datasets: [{
+      label: '前日 (8/19)',
+      data: [-2.40, -5.01, -2.90, -6.89, -6.26, -4.81, -5.39, -4.89],
+      backgroundColor: function(ctx) {
+        const v = ctx.parsed.y;
+        if (v === null) return 'rgba(156,163,175,0.3)';
+        return v >= 0 ? RED : GREEN;
+      },
+      borderRadius: 5,
+      barPercentage: 0.7,
+    }, {
+      label: '今日 (8/20)',
+      data: [0.24, 0.59, 0.09, -0.87, 0.64, 0.86, 0.96, -0.06],
+      backgroundColor: function(ctx) {
+        const v = ctx.parsed.y;
+        if (v === null) return 'rgba(156,163,175,0.3)';
+        return v >= 0 ? RED : GREEN;
+      },
+      borderRadius: 5,
+      barPercentage: 0.7,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: isNarrow() ? 'bottom' : 'top',
+        labels: { boxWidth: 10, padding: isNarrow() ? 6 : 12, font: { size: isNarrow() ? 10 : 12 } }
+      },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y === null ? '无数据' : ctx.parsed.y.toFixed(2) + '%') } }
+    },
+    scales: {
+      y: {
+        ticks: { callback: v => v + '%', font: { size: isNarrow() ? 10 : 12 } },
+        grid: { color: '#f0f2f5' }
+      },
+      x: { grid: { display: false }, ticks: { font: { size: isNarrow() ? 9 : 11 } } }
+    }
+  }
+});
+
+// ===== 3. Volume Chart =====
+new Chart(document.getElementById('volumeChart'), {
+  type: 'bar',
+  data: {
+    labels: ['前日 (8/19)', '今日 (8/20)'],
+    datasets: [{
+      label: '成交额（万亿）',
+      data: [2.53, 2.09],
+      backgroundColor: [RED, ORANGE],
+      borderRadius: 8,
+      barPercentage: 0.5,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => '成交额: ' + ctx.parsed.y + '万亿' } }
+    },
+    scales: {
+      y: {
+        beginAtZero: false,
+        min: 1.8,
+        max: 2.7,
+        ticks: { callback: v => v + '万亿', font: { size: isNarrow() ? 10 : 12 } },
+        grid: { color: '#f0f2f5' }
+      }
+    }
+  }
+});
+
+// ===== 4. All Index Chart =====
+new Chart(document.getElementById('allIndexChart'), {
+  type: 'bar',
+  data: {
+    labels: ['科创50', '北证50', '沪深300', '上证指数', '深证成指', '创业板指', '中证500', '中证1000', '恒生指数'],
+    datasets: [{
+      label: '今日涨跌幅',
+      data: [-0.87, -0.06, 0.09, 0.24, 0.59, 0.64, 0.86, 0.96, 1.05],
+      backgroundColor: function(ctx) {
+        const v = ctx.parsed.y;
+        if (v === null || v === undefined) return GRAY;
+        return v >= 0 ? RED : GREEN;
+      },
+      borderRadius: 5,
+      barPercentage: 0.7,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => '涨跌幅: ' + ctx.parsed.y.toFixed(2) + '%' } }
+    },
+    scales: {
+      y: {
+        ticks: { callback: v => v + '%', font: { size: isNarrow() ? 10 : 12 } },
+        grid: { color: '#f0f2f5' }
+      },
+      x: {
+        ticks: {
+          maxRotation: isNarrow() ? 60 : 45,
+          minRotation: isNarrow() ? 45 : 35,
+          font: { size: isNarrow() ? 9 : 10 }
+        },
+        grid: { display: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
