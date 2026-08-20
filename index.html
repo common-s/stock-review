@@ -985,11 +985,45 @@ body {
   .timeline-panel {
     position: static;
     flex: 0 0 auto;
-    max-height: 260px;
+    max-height: 300px;
+    overflow: visible;
   }
   .timeline-panel.collapsed {
-    flex-basis: 0;
+    flex-basis: auto;          /* 不用0，让按钮撑开高度 */
     max-height: 52px;
+    padding: 0;
+    overflow: visible;        /* 不裁剪按钮 */
+  }
+  /* 手机端：折叠按钮改为通栏条状，始终可见可点 */
+  .timeline-panel .collapse-btn {
+    position: relative !important;
+    top: 0; right: 0;
+    width: 100%;
+    height: 44px;
+    min-height: 44px;
+    border-radius: 12px;
+    background: var(--bg-card);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    font-size: 14px;
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
+    letter-spacing: normal;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .timeline-panel.collapsed .collapse-btn {
+    width: 100%;
+    height: 44px;
+    min-height: 44px;
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
+    letter-spacing: normal;
+    margin-bottom: 0;
+    background: var(--bg-card);
+    box-shadow: var(--shadow);
   }
   .timeline-grid {
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -1004,7 +1038,7 @@ body {
   .timeline-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
   .date-card { padding: 10px 8px 8px; }
   .date-card-day { font-size: 18px; }
-  .timeline-panel { max-height: 240px; }
+  .timeline-panel { max-height: 280px; }
   .today-btn { padding: 7px 12px; font-size: 12px; }
   .nav-btn { width: 34px; height: 34px; }
   .report-panel { min-height: calc(100vh - 180px); }
@@ -1468,11 +1502,22 @@ document.addEventListener('keydown', (e) => {
 });
 
 /* 侧边栏折叠 */
-collapseBtn.addEventListener('click', () => {
-  const collapsed = timelinePanel.classList.toggle('collapsed');
-  collapseBtn.textContent = collapsed ? '📚 复盘归档' : '«';
+function isMobileLayout() { return window.matchMedia('(max-width: 980px)').matches; }
+function updateCollapseBtnText() {
+  const collapsed = timelinePanel.classList.contains('collapsed');
+  if (isMobileLayout()) {
+    collapseBtn.textContent = collapsed ? '📚 复盘归档  ▲' : '📚 复盘归档  ▼';
+  } else {
+    collapseBtn.textContent = collapsed ? '📚 复盘归档' : '«';
+  }
   collapseBtn.title = collapsed ? '展开归档列表' : '收起归档列表';
+}
+collapseBtn.addEventListener('click', () => {
+  timelinePanel.classList.toggle('collapsed');
+  updateCollapseBtnText();
 });
+/* 窗口尺寸变化时同步更新按钮文案 */
+window.addEventListener('resize', () => { updateCollapseBtnText(); });
 
 /* ============================================================
  * 5. 标签弹窗逻辑
@@ -1528,6 +1573,7 @@ document.addEventListener('keydown', (e) => {
  * ============================================================ */
 renderTimeline();
 updateNavButtons();
+updateCollapseBtnText();   /* 根据屏幕尺寸初始化折叠按钮文案 */
 loadDate(currentDate);
 </script>
 </body>
