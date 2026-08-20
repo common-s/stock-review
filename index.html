@@ -6,316 +6,1009 @@
 <title>A股收盘复盘 · 资料归档</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-  :root {
-    --accent: #e74c3c;
-    --accent-dark: #c0392b;
-    --bg-page: #f0f2f5;
-    --bg-card: #ffffff;
-    --text-main: #1a1a2e;
-    --text-sub: #6b7280;
-    --border: #e5e7eb;
-    --radius: 16px;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-    background: var(--bg-page);
-    color: var(--text-main);
-    line-height: 1.6;
-    min-height: 100vh;
-  }
+/* ============ 全局 Shell 样式（主框架：导航 / 时间线 / 弹窗） ============ */
+:root {
+  --accent: #e74c3c;
+  --accent-dark: #c0392b;
+  --star: #f5b400;
+  --star-bg: #fff4bf;
+  --bg-page: #f0f2f5;
+  --bg-card: #ffffff;
+  --text-main: #1a1a2e;
+  --text-sub: #6b7280;
+  --border: #e5e7eb;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg-page);
+  color: var(--text-main);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-size: clamp(14px, 1.6vw, 16px);
+}
 
-  /* ===== 顶部导航栏 ===== */
-  .topbar {
-    position: sticky;
-    top: 0;
-    z-index: 200;
-    background: rgba(255,255,255,0.96);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 2px 16px rgba(0,0,0,0.04);
-  }
-  .topbar-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-  }
-  .brand-logo {
-    width: 36px; height: 36px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    box-shadow: 0 2px 8px rgba(231,76,60,0.25);
-  }
-  .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
-  .brand-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
-  .brand-sub { font-size: 11px; color: var(--text-sub); letter-spacing: 0.5px; }
+/* ============= 顶部导航 ============= */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+}
+.topbar-inner {
+  width: 100%;
+  max-width: none;
+  padding: 12px clamp(14px, 3vw, 32px);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.brand-logo {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px;
+  box-shadow: 0 2px 8px rgba(231,76,60,0.25);
+}
+.brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+.brand-title { font-size: clamp(14px, 1.8vw, 16px); font-weight: 700; }
+.brand-sub { font-size: 11px; color: var(--text-sub); letter-spacing: 0.5px; }
 
-  /* 日期选择控件 */
-  .date-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-left: auto;
-    flex-wrap: wrap;
-  }
-  .nav-btn {
-    width: 34px; height: 34px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--bg-card);
-    cursor: pointer;
-    font-size: 14px;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-    flex-shrink: 0;
-  }
-  .nav-btn:hover:not(:disabled) { background: #f3f4f6; border-color: #d1d5db; transform: translateY(-1px); }
-  .nav-btn:active:not(:disabled) { transform: scale(0.95); }
-  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.date-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+.nav-btn {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-main);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.nav-btn:hover:not(:disabled) { background: #f3f4f6; border-color: #d1d5db; transform: translateY(-1px); }
+.nav-btn:active:not(:disabled) { transform: scale(0.95); }
+.nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .date-input-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  .date-input-wrap input[type="date"] {
-    appearance: none;
-    -webkit-appearance: none;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 8px 14px 8px 36px;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: inherit;
-    background: var(--bg-card);
-    color: var(--text-main);
-    cursor: pointer;
-    transition: border 0.15s;
-    width: 170px;
-  }
-  .date-input-wrap input[type="date"]:hover { border-color: #d1d5db; }
-  .date-input-wrap input[type="date"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(231,76,60,0.1); }
-  .date-input-wrap::before {
-    content: '📅';
-    position: absolute;
-    left: 12px;
-    font-size: 14px;
-    pointer-events: none;
-  }
+.date-input-wrap { position: relative; display: flex; align-items: center; }
+.date-input-wrap input[type="date"] {
+  appearance: none; -webkit-appearance: none;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 14px 8px 36px;
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  background: var(--bg-card);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: border 0.15s;
+  width: 170px;
+}
+.date-input-wrap input[type="date"]:hover { border-color: #d1d5db; }
+.date-input-wrap input[type="date"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(231,76,60,0.12); }
+.date-input-wrap::before {
+  content: '📅';
+  position: absolute;
+  left: 12px;
+  font-size: 14px;
+  pointer-events: none;
+}
+.today-btn {
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.today-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(231,76,60,0.3); }
+.today-btn:active { transform: scale(0.96); }
 
-  .today-btn {
-    padding: 8px 14px;
-    border-radius: 10px;
-    border: 1px solid var(--accent);
-    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-    color: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .today-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(231,76,60,0.3); }
-  .today-btn:active { transform: scale(0.96); }
+/* ============= 主布局：左侧时间线 + 右侧报告 ============= */
+.app-layout {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  gap: clamp(12px, 2vw, 24px);
+  padding: clamp(12px, 2vw, 24px);
+  max-width: none;
+  min-height: 0;
+}
 
-  /* ===== 内容区域 ===== */
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-  }
+/* 左侧：时间线面板 */
+.timeline-panel {
+  flex: 0 0 clamp(260px, 22vw, 340px);
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: flex-basis 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+  overflow: hidden;
+  max-height: calc(100vh - 78px);
+  position: sticky;
+  top: 78px;
+}
+.timeline-panel.collapsed {
+  flex-basis: 44px;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: none;
+}
+.timeline-panel.collapsed .timeline-panel-inner { display: none; }
 
-  /* 日期时间线（归档列表） */
-  .timeline-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 8px 4px 14px;
-  }
-  .timeline-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text-sub);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .timeline-count {
-    font-size: 12px;
-    background: var(--accent);
-    color: #fff;
-    padding: 2px 9px;
-    border-radius: 10px;
-    font-weight: 600;
-  }
-  .toggle-list-btn {
-    font-size: 12px;
-    color: var(--text-sub);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-    transition: all 0.15s;
-  }
-  .toggle-list-btn:hover { background: #e5e7eb; color: var(--text-main); }
+.timeline-panel-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+}
+.timeline-header {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.timeline-title {
+  font-size: 14px; font-weight: 700; color: var(--text-sub);
+  display: flex; align-items: center; gap: 6px;
+}
+.timeline-count {
+  font-size: 12px;
+  background: var(--accent);
+  color: #fff;
+  padding: 2px 9px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.timeline-tag-hint {
+  font-size: 11px;
+  color: var(--text-sub);
+  margin-top: -4px;
+  padding: 0 2px;
+  line-height: 1.4;
+}
+.timeline-tag-hint b { color: var(--star); }
 
-  .timeline {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 10px;
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
-    overflow: hidden;
-  }
-  .timeline.collapsed {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    max-height: 0;
-    margin-bottom: 0;
-    opacity: 0;
-    pointer-events: none;
-  }
+.timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+.timeline-grid::-webkit-scrollbar { width: 6px; }
+.timeline-grid::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+.timeline-grid::-webkit-scrollbar-track { background: transparent; }
 
-  .date-card {
-    background: var(--bg-card);
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 10px;
-    cursor: pointer;
-    transition: all 0.18s;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .date-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-    transform: scaleX(0);
-    transition: transform 0.2s;
-    transform-origin: left;
-  }
-  .date-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.07); border-color: #d1d5db; }
-  .date-card:hover::before { transform: scaleX(1); }
-  .date-card.active {
-    border-color: var(--accent);
-    box-shadow: 0 4px 16px rgba(231,76,60,0.18);
-    background: linear-gradient(135deg, #fff5f5 0%, #fef2f2 100%);
-  }
-  .date-card.active::before { transform: scaleX(1); }
+.date-card {
+  background: #fafbfc;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 10px 10px;
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: center;
+  position: relative;
+  overflow: visible;
+}
+.date-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+  transform: scaleX(0);
+  transition: transform 0.2s;
+  transform-origin: left;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.date-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+  border-color: #d1d5db;
+}
+.date-card:hover::before { transform: scaleX(1); }
+.date-card.active {
+  border-color: var(--accent);
+  box-shadow: 0 4px 16px rgba(231,76,60,0.18);
+  background: linear-gradient(135deg, #fff5f5 0%, #fef2f2 100%);
+}
+.date-card.active::before { transform: scaleX(1); }
 
-  .date-card-day {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--text-main);
-    line-height: 1;
-    margin-bottom: 4px;
-    font-family: "SF Mono", "Fira Code", monospace;
-  }
-  .date-card.active .date-card-day { color: var(--accent); }
-  .date-card-month {
-    font-size: 11px;
-    color: var(--text-sub);
-    font-weight: 600;
-    margin-bottom: 2px;
-  }
-  .date-card-weekday {
-    font-size: 10px;
-    color: #9ca3af;
-  }
-  .date-card-latest {
-    position: absolute;
-    top: 6px; right: 6px;
-    font-size: 9px;
-    padding: 1px 6px;
-    border-radius: 6px;
-    background: var(--accent);
-    color: #fff;
-    font-weight: 700;
-  }
+.date-card-month { font-size: 11px; color: var(--text-sub); font-weight: 600; margin-bottom: 2px; }
+.date-card-day {
+  font-size: 22px; font-weight: 800;
+  color: var(--text-main); line-height: 1; margin-bottom: 4px;
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+.date-card.active .date-card-day { color: var(--accent); }
+.date-card-weekday { font-size: 10px; color: #9ca3af; }
 
-  /* 报告展示区 */
-  .report-frame-wrap {
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-    overflow: hidden;
-    position: relative;
-    min-height: 600px;
-  }
-  .report-frame-wrap.loading::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
-    animation: loading 1s ease-in-out infinite;
-  }
-  @keyframes loading {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-  }
+.date-card-latest {
+  position: absolute;
+  top: 6px; left: 6px;
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
 
-  #reportFrame {
-    width: 100%;
-    min-height: calc(100vh - 260px);
-    border: none;
-    display: block;
-  }
+/* 黄色星星（有标签才显示） */
+.date-card-star {
+  position: absolute;
+  top: 5px; right: 5px;
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px;
+  background: var(--star-bg);
+  color: var(--star);
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(245,180,0,0.25);
+  transition: transform 0.15s;
+  z-index: 2;
+}
+.date-card-star:hover { transform: scale(1.15) rotate(-8deg); }
+.date-card-star.hidden { display: none; }
 
-  /* 无报告提示 */
-  .empty-state {
-    padding: 80px 40px;
-    text-align: center;
-  }
-  .empty-icon { font-size: 56px; margin-bottom: 16px; }
-  .empty-title { font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
-  .empty-text { font-size: 14px; color: var(--text-sub); }
+/* 标签编辑按钮（始终显示一个小图标在右下角，hover更明显） */
+.date-card-tag-btn {
+  position: absolute;
+  bottom: 5px; right: 5px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: transparent;
+  color: #cbd5e1;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0.6;
+  transition: all 0.15s;
+  z-index: 2;
+}
+.date-card-tag-btn:hover {
+  opacity: 1;
+  color: var(--star);
+  background: var(--star-bg);
+  transform: scale(1.1);
+}
 
-  /* 页脚 */
-  .footer {
-    text-align: center;
-    padding: 20px;
-    font-size: 12px;
-    color: #9ca3af;
-  }
+/* 折叠/展开侧边按钮 */
+.collapse-btn {
+  position: absolute;
+  right: 0;
+  top: 12px;
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-sub);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  transition: all 0.15s;
+  z-index: 3;
+}
+.collapse-btn:hover { background: #f3f4f6; color: var(--text-main); }
+.timeline-panel.collapsed .collapse-btn {
+  position: static;
+  width: 100%;
+  height: 100%;
+  min-height: 52px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  box-shadow: var(--shadow);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  letter-spacing: 2px;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.timeline-panel.collapsed .collapse-btn:hover { background: #fff5f5; }
 
-  /* 响应式 */
-  @media (max-width: 768px) {
-    .topbar-inner { padding: 10px 14px; gap: 10px; }
-    .brand { width: 100%; }
-    .date-controls { margin-left: 0; width: 100%; justify-content: space-between; }
-    .date-input-wrap input[type="date"] { width: 150px; padding: 7px 12px 7px 34px; font-size: 13px; }
-    .container { padding: 14px; }
-    .timeline { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
-    .date-card { padding: 10px 8px; }
-    .date-card-day { font-size: 18px; }
+/* 右侧：报告面板（全屏自适应） */
+.report-panel {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 120px);
+}
+.report-panel.loading::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
+  animation: loading 1s ease-in-out infinite;
+  z-index: 10;
+}
+@keyframes loading {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+#reportContent {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  background: transparent;
+}
+/* 让注入的 .report 内部最大宽度保留，但外部撑满 */
+#reportContent .report {
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+#reportContent .toc {
+  max-width: none;
+  border-radius: 0;
+}
+#reportContent .toc-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+/* 无报告提示 */
+.empty-state { padding: 80px 40px; text-align: center; }
+.empty-icon { font-size: 56px; margin-bottom: 16px; }
+.empty-title { font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+.empty-text { font-size: 14px; color: var(--text-sub); }
+
+/* 页脚 */
+.footer {
+  text-align: center;
+  padding: 14px 20px 20px;
+  font-size: 12px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+/* ============= 标签编辑弹窗 ============= */
+.modal-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.48);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+.modal-mask.show { display: flex; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  background: #fff;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  overflow: hidden;
+  animation: modalIn 0.25s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes modalIn {
+  from { transform: translateY(10px) scale(0.97); opacity: 0; }
+  to   { transform: translateY(0)    scale(1);    opacity: 1; }
+}
+.modal-header {
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
+}
+.modal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.modal-title .star { color: var(--star); font-size: 20px; filter: drop-shadow(0 1px 2px rgba(245,180,0,0.4)); }
+.modal-title .date-tag {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 13px;
+  color: var(--text-sub);
+  font-weight: 600;
+  padding: 2px 8px;
+  background: #f3f4f6;
+  border-radius: 6px;
+}
+.modal-close {
+  width: 30px; height: 30px;
+  border: none;
+  background: transparent;
+  color: var(--text-sub);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.modal-close:hover { background: #f3f4f6; color: var(--text-main); }
+
+.modal-body { padding: 20px 22px 10px; }
+.modal-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-sub);
+  margin-bottom: 8px;
+}
+.modal textarea {
+  width: 100%;
+  min-height: 140px;
+  resize: vertical;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.7;
+  font-family: inherit;
+  color: var(--text-main);
+  background: #fafbfc;
+  transition: border 0.15s, box-shadow 0.15s;
+}
+.modal textarea::placeholder { color: #c0c4cc; }
+.modal textarea:hover { border-color: #d1d5db; background: #fff; }
+.modal textarea:focus {
+  outline: none;
+  border-color: var(--star);
+  box-shadow: 0 0 0 3px rgba(245,180,0,0.12);
+  background: #fff;
+}
+.modal-tip {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-sub);
+  line-height: 1.5;
+}
+.modal-tip b { color: var(--star); }
+
+.modal-footer {
+  padding: 12px 22px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.modal-footer .left-actions,
+.modal-footer .right-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.btn {
+  padding: 9px 16px;
+  border-radius: 10px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text-sub);
+}
+.btn-ghost:hover { background: #f3f4f6; color: var(--text-main); }
+.btn-danger {
+  background: #fef2f2;
+  color: #dc2626;
+}
+.btn-danger:hover { background: #fee2e2; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #fff;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(231,76,60,0.3); }
+.btn-primary:active { transform: scale(0.97); }
+.btn-star {
+  background: linear-gradient(135deg, #f5b400, #e0a400);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(245,180,0,0.3);
+}
+.btn-star:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(245,180,0,0.4); }
+.btn-star:active { transform: scale(0.97); }
+
+/* ============= 报告内部样式（来自 8/20 最新报告，统一所有报告外观） ============= */
+:root {
+  --report-accent: #e74c3c;
+  --report-accent-dark: #c0392b;
+  --report-positive: #e74c3c;
+  --report-negative: #27ae60;
+  --report-blue: #3b82f6;
+  --report-text-main: #1a1a2e;
+  --report-text-sub: #6b7280;
+  --report-text-light: #9ca3af;
+  --report-bg-page: #f0f2f5;
+  --report-bg-card: #f8f9fb;
+  --report-border: #eef0f4;
+  --report-page-pad: clamp(10px, 2.5vw, 24px);
+  --report-sec-pad-x: clamp(16px, 4vw, 36px);
+  --report-sec-pad-y: clamp(22px, 3.2vw, 32px);
+  --report-radius: clamp(12px, 2vw, 16px);
+}
+#reportContent .report *, #reportContent .toc * { box-sizing: border-box; }
+#reportContent { padding: 0; }
+
+#reportContent .toc {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--report-border);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  margin-bottom: clamp(10px, 1.5vw, 14px);
+}
+#reportContent .toc-inner {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: clamp(6px, 1vw, 10px) clamp(12px, 2.5vw, 24px);
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+#reportContent .toc-inner::-webkit-scrollbar { display: none; }
+#reportContent .toc-label { font-size: 12px; font-weight: 700; color: var(--report-text-sub); margin-right: 6px; flex-shrink: 0; }
+#reportContent .toc a {
+  text-decoration: none;
+  color: #4b5563;
+  font-size: clamp(12px, 1.4vw, 13px);
+  padding: 5px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+#reportContent .toc a:hover { background: #f3f4f6; color: var(--report-accent); }
+#reportContent .toc a:active { transform: scale(0.96); }
+
+#reportContent .report {
+  background: #ffffff;
+  border-radius: var(--report-radius);
+  box-shadow: none;
+  overflow: hidden;
+}
+#reportContent .header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: #fff;
+  padding: clamp(30px, 5.5vw, 44px) clamp(20px, 4vw, 36px) clamp(24px, 4vw, 32px);
+  position: relative;
+  overflow: hidden;
+}
+#reportContent .header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: clamp(140px, 25vw, 220px);
+  height: clamp(140px, 25vw, 220px);
+  background: radial-gradient(circle, rgba(231,76,60,0.18) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+#reportContent .header-label {
+  font-size: clamp(11px, 1.3vw, 13px);
+  letter-spacing: clamp(2px, 0.4vw, 3px);
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 8px;
+}
+#reportContent .header h1 {
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 700;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+#reportContent .header .date {
+  font-size: clamp(13px, 1.6vw, 15px);
+  color: rgba(255,255,255,0.7);
+}
+#reportContent .header .badge {
+  display: inline-block;
+  margin-top: clamp(10px, 1.5vw, 14px);
+  padding: 5px clamp(10px, 1.5vw, 14px);
+  background: rgba(231,76,60,0.18);
+  border: 1px solid rgba(231,76,60,0.4);
+  border-radius: 20px;
+  font-size: clamp(12px, 1.4vw, 13px);
+  color: #ff8a80;
+  line-height: 1.5;
+}
+#reportContent .section {
+  padding: var(--report-sec-pad-y) var(--report-sec-pad-x);
+  border-bottom: 1px solid var(--report-border);
+  scroll-margin-top: 56px;
+}
+#reportContent .section:last-child { border-bottom: none; }
+#reportContent .section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(16px, 2.2vw, 19px);
+  font-weight: 700;
+  color: var(--report-text-main);
+  margin-bottom: clamp(14px, 2vw, 20px);
+}
+#reportContent .section-title .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(24px, 3vw, 28px);
+  height: clamp(24px, 3vw, 28px);
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--report-accent), var(--report-accent-dark));
+  color: #fff;
+  font-size: clamp(12px, 1.5vw, 14px);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+#reportContent .section-title .icon { font-size: clamp(18px, 2.4vw, 22px); }
+
+#reportContent .metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(10px, 1.5vw, 14px);
+  margin-bottom: clamp(14px, 2vw, 20px);
+}
+/* 兼容 8/7 报告的 4列布局 */
+#reportContent .metric-grid.cols-4, #reportContent .report:not(.has-sec-id) .metric-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+#reportContent .metric-card {
+  background: var(--report-bg-card);
+  border-radius: 12px;
+  padding: clamp(13px, 1.8vw, 16px) clamp(11px, 1.5vw, 14px);
+  border: 1px solid var(--report-border);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+#reportContent .metric-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+#reportContent .metric-card .label {
+  font-size: clamp(11px, 1.3vw, 12px);
+  color: var(--report-text-sub);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+#reportContent .metric-card .value {
+  font-size: clamp(19px, 2.6vw, 22px);
+  font-weight: 700;
+  font-family: "SF Mono", "Fira Code", monospace;
+  line-height: 1.3;
+  word-break: break-word;
+}
+#reportContent .metric-card .delta {
+  font-size: clamp(11px, 1.2vw, 12px);
+  margin-top: 4px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+#reportContent .metric-card.highlight {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-color: #fca5a5;
+}
+#reportContent .metric-card.recovery {
+  background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+  border-color: #fcd34d;
+}
+#reportContent .up { color: var(--report-positive); }
+#reportContent .down { color: var(--report-negative); }
+#reportContent .neutral { color: var(--report-text-sub); }
+
+#reportContent .table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--report-border);
+}
+#reportContent table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(12px, 1.5vw, 14px);
+}
+#reportContent th {
+  background: var(--report-bg-card);
+  padding: clamp(9px, 1.2vw, 12px) clamp(10px, 1.5vw, 14px);
+  text-align: left;
+  font-weight: 600;
+  color: #4b5563;
+  font-size: clamp(11px, 1.3vw, 13px);
+  border-bottom: 2px solid #e5e7eb;
+  white-space: nowrap;
+}
+#reportContent td {
+  padding: clamp(9px, 1.2vw, 11px) clamp(10px, 1.5vw, 14px);
+  border-bottom: 1px solid var(--report-border);
+  color: #1f2937;
+  white-space: nowrap;
+}
+#reportContent tr:last-child td { border-bottom: none; }
+#reportContent tr:hover td { background: #fafbfc; }
+#reportContent .table-wide table { min-width: 620px; }
+#reportContent .table-narrow table { min-width: 480px; }
+
+#reportContent .pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: clamp(11px, 1.2vw, 12px);
+  font-weight: 600;
+  white-space: nowrap;
+}
+#reportContent .pill-red { background: #fef2f2; color: var(--report-accent); }
+#reportContent .pill-green { background: #f0fdf4; color: #16a34a; }
+#reportContent .pill-gray { background: #f3f4f6; color: var(--report-text-sub); }
+#reportContent .pill-orange { background: #fff7ed; color: #ea580c; }
+#reportContent .pill-blue { background: #eff6ff; color: var(--report-blue); }
+#reportContent .pill-darkred { background: #fef2f2; color: #dc2626; }
+
+#reportContent .chart-container {
+  background: var(--report-bg-card);
+  border-radius: 12px;
+  padding: clamp(14px, 2vw, 20px);
+  margin-bottom: 16px;
+  border: 1px solid var(--report-border);
+}
+#reportContent .chart-title {
+  font-size: clamp(12px, 1.6vw, 14px);
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+#reportContent .chart-wrapper { position: relative; height: clamp(220px, 30vw, 280px); }
+#reportContent .chart-wrapper-sm { position: relative; height: clamp(170px, 24vw, 220px); }
+#reportContent .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 1.8vw, 16px);
+}
+
+#reportContent .alert-box {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border-left: 4px solid #16a34a;
+  border-radius: 8px;
+  padding: clamp(14px, 2vw, 16px) clamp(16px, 2.4vw, 20px);
+  margin-bottom: 16px;
+}
+#reportContent .alert-box .alert-title {
+  font-size: clamp(13px, 1.5vw, 14px);
+  font-weight: 700;
+  color: #15803d;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#reportContent .alert-box .alert-text {
+  font-size: clamp(12px, 1.5vw, 13px);
+  color: #166534;
+  line-height: 1.7;
+}
+#reportContent .alert-box.warning {
+  background: linear-gradient(135deg, #fff7ed 0%, #fffbeb 100%);
+  border-left-color: #f59e0b;
+}
+#reportContent .alert-box.warning .alert-title { color: #b45309; }
+#reportContent .alert-box.warning .alert-text { color: #92400e; }
+
+#reportContent .portfolio-box {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-left: 4px solid #3b82f6;
+  border-radius: 8px;
+  padding: clamp(14px, 2vw, 16px) clamp(16px, 2.4vw, 20px);
+  margin-bottom: 16px;
+}
+#reportContent .portfolio-box .portfolio-title {
+  font-size: clamp(13px, 1.5vw, 14px);
+  font-weight: 700;
+  color: #1e40af;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#reportContent .portfolio-box .portfolio-text {
+  font-size: clamp(12px, 1.5vw, 13px);
+  color: #1e3a8a;
+  line-height: 1.7;
+}
+
+#reportContent .interp-card {
+  background: var(--report-bg-card);
+  border-radius: 12px;
+  padding: clamp(16px, 2.4vw, 20px) clamp(16px, 2.8vw, 24px);
+  margin-bottom: 14px;
+  border: 1px solid var(--report-border);
+}
+#reportContent .interp-card h3 {
+  font-size: clamp(14px, 1.8vw, 15px);
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.5;
+}
+#reportContent .interp-card ul { list-style: none; padding-left: 0; }
+#reportContent .interp-card li {
+  padding: 6px 0;
+  font-size: clamp(13px, 1.6vw, 14px);
+  color: #374151;
+  padding-left: 18px;
+  position: relative;
+  line-height: 1.7;
+}
+#reportContent .interp-card li::before {
+  content: '\25B8';
+  position: absolute;
+  left: 0;
+  color: var(--report-accent);
+}
+#reportContent .interp-card .tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 6px;
+  font-size: clamp(11px, 1.2vw, 12px);
+  font-weight: 600;
+  margin: 0 2px;
+  white-space: nowrap;
+}
+
+#reportContent .gauge-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  padding: 10px 0;
+}
+#reportContent .gauge-bar {
+  flex: 1;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #27ae60 0%, #95a5a6 50%, #e74c3c 100%);
+  position: relative;
+}
+#reportContent .gauge-pointer {
+  position: absolute;
+  top: -6px;
+  width: 3px;
+  height: 24px;
+  background: #1a1a2e;
+  border-radius: 2px;
+}
+#reportContent .gauge-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 6px;
+}
+
+#reportContent .disclaimer {
+  padding: clamp(18px, 2.4vw, 20px) var(--report-sec-pad-x) clamp(24px, 3vw, 28px);
+  background: var(--report-bg-card);
+  text-align: center;
+}
+#reportContent .disclaimer p {
+  font-size: clamp(11px, 1.3vw, 12px);
+  color: var(--report-text-light);
+  line-height: 1.8;
+}
+#reportContent .disclaimer .gen-time {
+  margin-top: 8px;
+  font-size: clamp(10px, 1.1vw, 11px);
+  color: #c0c4cc;
+}
+
+@media (max-width: 900px) {
+  #reportContent .metric-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 640px) {
+  #reportContent .two-col { grid-template-columns: 1fr; }
+  #reportContent .metric-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
+  #reportContent .metric-card .value { font-size: clamp(18px, 5vw, 22px); }
+  #reportContent .header h1 { letter-spacing: 0; }
+  #reportContent .toc { margin-bottom: 8px; }
+}
+@media (max-width: 400px) {
+  #reportContent .metric-grid { grid-template-columns: 1fr !important; }
+  #reportContent .metric-card { padding: 12px 14px; }
+}
+@media print {
+  #reportContent .report { box-shadow: none; border-radius: 0; }
+  #reportContent .toc { display: none; }
+  #reportContent .metric-card:hover { transform: none; box-shadow: none; }
+}
+
+/* ============= 全局响应式：布局切换 ============= */
+@media (max-width: 980px) {
+  .app-layout {
+    flex-direction: column;
   }
-  @media (max-width: 400px) {
-    .today-btn { padding: 7px 10px; font-size: 12px; }
-    .nav-btn { width: 32px; height: 32px; }
+  .timeline-panel {
+    position: static;
+    flex: 0 0 auto;
+    max-height: 260px;
   }
+  .timeline-panel.collapsed {
+    flex-basis: 0;
+    max-height: 52px;
+  }
+  .timeline-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .topbar-inner { padding: 10px 14px; gap: 10px; }
+  .brand { width: 100%; }
+  .date-controls { margin-left: 0; width: 100%; justify-content: space-between; }
+  .date-input-wrap input[type="date"] { width: 150px; padding: 7px 12px 7px 34px; font-size: 13px; }
+  .app-layout { padding: 12px; gap: 12px; }
+  .timeline-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+  .date-card { padding: 10px 8px 8px; }
+  .date-card-day { font-size: 18px; }
+  .timeline-panel { max-height: 240px; }
+  .today-btn { padding: 7px 12px; font-size: 12px; }
+  .nav-btn { width: 34px; height: 34px; }
+  .report-panel { min-height: calc(100vh - 180px); }
+}
 </style>
 </head>
 <body>
@@ -330,45 +1023,88 @@
         <div class="brand-sub">MARKET REVIEW ARCHIVES</div>
       </div>
     </div>
-
     <div class="date-controls">
-      <button class="nav-btn" id="prevBtn" title="上一交易日">◀</button>
+      <button class="nav-btn" id="prevBtn" title="上一交易日 (←)">◀</button>
       <div class="date-input-wrap">
         <input type="date" id="datePicker">
       </div>
-      <button class="nav-btn" id="nextBtn" title="下一交易日">▶</button>
-      <button class="today-btn" id="todayBtn">最新</button>
+      <button class="nav-btn" id="nextBtn" title="下一交易日 (→)">▶</button>
+      <button class="today-btn" id="todayBtn">🚀 最新</button>
     </div>
   </div>
 </div>
 
-<!-- 主内容 -->
-<div class="container">
+<!-- 主布局 -->
+<div class="app-layout">
 
-  <!-- 时间线 -->
-  <div class="timeline-header">
-    <div class="timeline-title">
-      📚 复盘归档
-      <span class="timeline-count" id="totalCount">0</span>
+  <!-- 左侧时间线面板 -->
+  <aside class="timeline-panel" id="timelinePanel">
+    <button class="collapse-btn" id="collapseBtn" title="收起/展开归档列表">«</button>
+    <div class="timeline-panel-inner">
+      <div class="timeline-header">
+        <div class="timeline-title">
+          📚 复盘归档
+          <span class="timeline-count" id="totalCount">0</span>
+        </div>
+      </div>
+      <div class="timeline-tag-hint">
+        点击日期切换复盘 · 点击 <b>⭐</b> 或 ✎ 查看/编辑标签
+      </div>
+      <div class="timeline-grid" id="timelineGrid"></div>
     </div>
-    <button class="toggle-list-btn" id="toggleBtn">收起 ▲</button>
-  </div>
-  <div class="timeline" id="timeline"></div>
+  </aside>
 
-  <!-- 报告 iframe -->
-  <div class="report-frame-wrap" id="frameWrap">
-    <iframe id="reportFrame" src="" title="复盘报告"></iframe>
-  </div>
+  <!-- 右侧报告内容 -->
+  <section class="report-panel" id="reportPanel">
+    <div id="reportContent">
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">📊</div>
+        <div class="empty-title">正在加载复盘报告…</div>
+        <div class="empty-text">请稍候，首次加载可能需要几秒钟</div>
+      </div>
+    </div>
+  </section>
 
 </div>
 
 <div class="footer">
-  A股收盘复盘系统 · 仅供参考，不构成投资建议
+  A股收盘复盘系统 · 仅供参考，不构成投资建议 · 标签保存在本地浏览器
+</div>
+
+<!-- ============ 标签编辑弹窗 ============ -->
+<div class="modal-mask" id="tagModal" role="dialog" aria-modal="true" aria-labelledby="tagModalTitle">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="tagModalTitle">
+        <span class="star">⭐</span>
+        <span>复盘标签</span>
+        <span class="date-tag" id="tagModalDate">—</span>
+      </div>
+      <button class="modal-close" id="tagModalClose" aria-label="关闭">✕</button>
+    </div>
+    <div class="modal-body">
+      <label class="modal-label" for="tagTextarea">我的标签备注</label>
+      <textarea id="tagTextarea" placeholder="在这里写下当天复盘的个人笔记、关注重点、操作思路等…例如：&#10;• 医药板块爆发，mRNA疫苗概念关注&#10;• 缩量反弹，注意二次探底风险&#10;• 持仓中xxx反弹乏力考虑减仓"></textarea>
+      <div class="modal-tip">
+        <b>⭐</b> 添加内容并保存后，对应日期卡片右上角会显示黄色星星。标签默认<b>保存在当前浏览器本地（localStorage）</b>，不会上传到服务器。
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="left-actions">
+        <button class="btn btn-danger" id="tagDeleteBtn" title="删除此标签">🗑 删除标签</button>
+      </div>
+      <div class="right-actions">
+        <button class="btn btn-ghost" id="tagCancelBtn">取消</button>
+        <button class="btn btn-star" id="tagSaveBtn">💾 保存标签</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-// ====== 从文件名自动提取可用日期 ======
-// 可用报告列表（按文件名模式自动生成，兼容已有HTML）
+/* ============================================================
+ * 1. 配置 & 工具
+ * ============================================================ */
 const REPORT_FILES = [
   'A股收盘复盘报告_2026-08-07.html',
   'A股收盘复盘报告_2026-08-10.html',
@@ -382,58 +1118,129 @@ const REPORT_FILES = [
   'A股收盘复盘报告_2026-08-20.html'
 ];
 
-// 解析出日期数组（YYYY-MM-DD），按降序排列（最新在前）
 const availableDates = REPORT_FILES
-  .map(f => {
-    const m = f.match(/(\d{4}-\d{2}-\d{2})/);
-    return m ? m[1] : null;
-  })
+  .map(f => { const m = f.match(/(\d{4}-\d{2}-\d{2})/); return m ? m[1] : null; })
   .filter(Boolean)
   .sort((a, b) => b.localeCompare(a));
 
 const WEEKDAYS = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+const STORAGE_KEY = 'stock-review-tags-v1';
 
-// DOM
-const datePicker = document.getElementById('datePicker');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const todayBtn = document.getElementById('todayBtn');
-const timeline = document.getElementById('timeline');
-const totalCount = document.getElementById('totalCount');
-const toggleBtn = document.getElementById('toggleBtn');
-const frameWrap = document.getElementById('frameWrap');
-const reportFrame = document.getElementById('reportFrame');
+/* ---------- DOM ---------- */
+const $ = id => document.getElementById(id);
+const datePicker    = $('datePicker');
+const prevBtn       = $('prevBtn');
+const nextBtn       = $('nextBtn');
+const todayBtn      = $('todayBtn');
+const timelineGrid  = $('timelineGrid');
+const totalCount    = $('totalCount');
+const collapseBtn   = $('collapseBtn');
+const timelinePanel = $('timelinePanel');
+const reportPanel   = $('reportPanel');
+const reportContent = $('reportContent');
+const emptyState    = $('emptyState');
+const tagModal      = $('tagModal');
+const tagModalDate  = $('tagModalDate');
+const tagTextarea   = $('tagTextarea');
+const tagSaveBtn    = $('tagSaveBtn');
+const tagDeleteBtn  = $('tagDeleteBtn');
+const tagCancelBtn  = $('tagCancelBtn');
+const tagModalClose = $('tagModalClose');
 
-let currentDate = availableDates[0]; // 默认最新
+let currentDate = availableDates[0];
+let activeCharts = [];   // 保存当前 Chart 实例，切换时销毁
+let tagEditingDate = null;
+let fetchedCache = {};   // 简单缓存已fetch的HTML文本
 
-// ====== 渲染时间线 ======
+/* ---------- 标签存储 ---------- */
+function loadTags() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+  catch { return {}; }
+}
+function saveTags(tags) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tags));
+}
+function getTag(date) { return loadTags()[date]; }
+function setTag(date, text) {
+  const tags = loadTags();
+  if (text && text.trim().length) {
+    tags[date] = { text: text.trim(), updatedAt: Date.now() };
+  } else {
+    delete tags[date];
+  }
+  saveTags(tags);
+}
+function deleteTag(date) {
+  const tags = loadTags();
+  delete tags[date];
+  saveTags(tags);
+}
+
+/* ============================================================
+ * 2. 渲染时间线（含⭐标签图标 & 编辑按钮）
+ * ============================================================ */
 function renderTimeline() {
+  const tags = loadTags();
   totalCount.textContent = availableDates.length;
-  timeline.innerHTML = availableDates.map((date, idx) => {
+  timelineGrid.innerHTML = availableDates.map((date, idx) => {
     const d = new Date(date + 'T00:00:00');
     const month = d.getMonth() + 1;
     const day = d.getDate();
     const weekday = WEEKDAYS[d.getDay()];
     const active = date === currentDate ? 'active' : '';
     const latest = idx === 0 ? '<span class="date-card-latest">NEW</span>' : '';
+    const hasTag = !!tags[date];
+    const starHidden = hasTag ? '' : 'hidden';
+    const weekdayNice = weekday.replace('星期', '周');
     return `
-      <div class="date-card ${active}" data-date="${date}" title="${date} ${weekday}">
+      <div class="date-card ${active}" data-date="${date}" title="${date} ${weekday}${hasTag ? ' · 有标签备注' : ''}">
         ${latest}
+        <span class="date-card-star ${starHidden}" data-star="${date}" title="查看/编辑标签备注">⭐</span>
+        <button class="date-card-tag-btn" data-tagbtn="${date}" title="添加标签备注">✎</button>
         <div class="date-card-month">${month}月</div>
         <div class="date-card-day">${String(day).padStart(2, '0')}</div>
-        <div class="date-card-weekday">${weekday}</div>
+        <div class="date-card-weekday">${weekdayNice}</div>
       </div>
     `;
   }).join('');
 
-  // 绑定点击
-  timeline.querySelectorAll('.date-card').forEach(card => {
-    card.addEventListener('click', () => loadDate(card.dataset.date));
+  // 绑定：日期卡片切换
+  timelineGrid.querySelectorAll('.date-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      // 如果点击的是⭐或编辑按钮，不触发日期切换
+      if (e.target.closest('[data-star]') || e.target.closest('[data-tagbtn]')) return;
+      loadDate(card.dataset.date);
+    });
+  });
+  // 绑定：⭐点击 → 打开标签编辑
+  timelineGrid.querySelectorAll('[data-star]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openTagModal(el.dataset.star);
+    });
+  });
+  // 绑定：编辑按钮点击 → 打开标签编辑
+  timelineGrid.querySelectorAll('[data-tagbtn]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openTagModal(el.dataset.tagbtn);
+    });
   });
 }
 
-// ====== 加载指定日期 ======
-function loadDate(date) {
+/* 单独刷新某日期卡片的星标显示（保存/删除后局部刷新，避免重建所有DOM） */
+function refreshCardStar(date) {
+  const card = timelineGrid.querySelector(`.date-card[data-date="${date}"]`);
+  if (!card) return;
+  const star = card.querySelector('[data-star]');
+  const has = !!getTag(date);
+  star.classList.toggle('hidden', !has);
+}
+
+/* ============================================================
+ * 3. 报告加载：fetch + 注入DOM + 销毁旧Chart + 执行新Chart脚本
+ * ============================================================ */
+async function loadDate(date) {
   if (!availableDates.includes(date)) {
     alert('该日期暂无复盘报告');
     return;
@@ -441,40 +1248,153 @@ function loadDate(date) {
   currentDate = date;
   datePicker.value = date;
 
-  // 更新时间线选中态
-  timeline.querySelectorAll('.date-card').forEach(card => {
+  /* 更新时间线选中态 */
+  timelineGrid.querySelectorAll('.date-card').forEach(card => {
     card.classList.toggle('active', card.dataset.date === date);
   });
-
-  // 滚动到当前选中卡片可见
-  const activeCard = timeline.querySelector('.date-card.active');
+  const activeCard = timelineGrid.querySelector('.date-card.active');
   if (activeCard) {
     activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
-
-  // 显示加载状态并切换 iframe
-  frameWrap.classList.add('loading');
-  const fileName = `A股收盘复盘报告_${date}.html`;
-  reportFrame.src = fileName;
-
-  reportFrame.onload = () => {
-    frameWrap.classList.remove('loading');
-  };
-  reportFrame.onerror = () => {
-    frameWrap.classList.remove('loading');
-  };
-
-  // 更新导航按钮状态
   updateNavButtons();
+
+  /* 显示 loading */
+  reportPanel.classList.add('loading');
+
+  try {
+    const fileName = `A股收盘复盘报告_${date}.html`;
+    let htmlText = fetchedCache[date];
+    if (!htmlText) {
+      const res = await fetch(fileName + '?_=' + Date.now());
+      if (!res.ok) throw new Error('加载失败: ' + res.status);
+      htmlText = await res.text();
+      fetchedCache[date] = htmlText;
+    }
+    renderReport(htmlText, date);
+  } catch (err) {
+    console.error(err);
+    reportContent.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">⚠️</div>
+        <div class="empty-title">报告加载失败</div>
+        <div class="empty-text">${err.message || '请检查文件是否存在，或刷新页面重试'}</div>
+      </div>`;
+  } finally {
+    reportPanel.classList.remove('loading');
+  }
 }
 
-// ====== 导航按钮 ======
+/* 销毁当前所有 Chart 实例 */
+function destroyActiveCharts() {
+  while (activeCharts.length) {
+    const c = activeCharts.pop();
+    try { c.destroy && c.destroy(); } catch (_) {}
+  }
+  // 兜底：遍历全局 Chart.instances（如果Chart.js暴露了）
+  if (window.Chart && Chart.instances) {
+    Object.values(Chart.instances).forEach(c => {
+      try { c.destroy && c.destroy(); } catch (_) {}
+    });
+  }
+}
+
+/* 渲染注入单篇报告 */
+function renderReport(htmlText, date) {
+  // 1) 销毁之前的图表实例，避免内存泄漏 & canvas ID冲突
+  destroyActiveCharts();
+
+  // 2) 解析 HTML
+  const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+
+  // 3) 提取 toc（目录，部分旧报告没有）和 report 主体
+  const tocEl = doc.querySelector('nav.toc');
+  const reportEl = doc.querySelector('.report');
+
+  if (!reportEl) {
+    reportContent.innerHTML = `<div class="empty-state"><div class="empty-icon">❌</div><div class="empty-title">报告内容解析失败</div></div>`;
+    return;
+  }
+
+  // 旧报告没有sec id，加一个has-sec-id判断CSS列数
+  const hasSecId = !!reportEl.querySelector('.section[id]');
+  reportEl.classList.toggle('has-sec-id', hasSecId);
+
+  // 4) 注入
+  let tocHtml = '';
+  if (tocEl) {
+    // 从新报告中直接克隆（包含章节锚点链接，锚点在当前页面仍然生效因为我们也注入了report）
+    tocHtml = tocEl.outerHTML;
+  }
+  reportContent.innerHTML = tocHtml + reportEl.outerHTML;
+
+  // 5) 提取并执行脚本（主要是 new Chart(...) 的代码）
+  const scripts = doc.querySelectorAll('script');
+  const chartCodes = [];
+  scripts.forEach(s => {
+    const code = s.textContent || '';
+    if (code.includes('new Chart') || code.includes('Chart.defaults')) {
+      chartCodes.push(code);
+    }
+  });
+
+  if (chartCodes.length) {
+    try {
+      /* 重写 Chart 构造以捕获实例（用于销毁） —— 不污染全局原型，而是在本作用域包装 */
+      const OriginalChart = window.Chart;
+      // 仅在本次执行范围内捕获
+      const sandboxCapture = () => {
+        // 使用局部变量 + 直接eval（捕获activeCharts）
+        const RED = '#e74c3c', GREEN = '#27ae60', BLUE = '#3b82f6', ORANGE = '#f59e0b', GRAY = '#9ca3af';
+        const isNarrow = () => window.innerWidth < 640;
+        // 重置Chart全局默认（和各报告头部保持一致）
+        OriginalChart.defaults.font.family = '-apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+        OriginalChart.defaults.color = '#6b7280';
+        OriginalChart.defaults.font.size = 12;
+
+        // 劫持 Chart 构造以注册实例（保持 Chart.defaults 等不变，不new就不影响）
+        const _Chart = new Proxy(OriginalChart, {
+          construct(target, args) {
+            const inst = new target(...args);
+            activeCharts.push(inst);
+            return inst;
+          }
+        });
+
+        // 由于 script 里是 new Chart(...)，我们无法直接替换全局符号中的构造
+        // 所以改为：将脚本中所有 new Chart(...) 替换为调用一个局部构造函数
+        // 最稳妥的做法 —— 临时把window.Chart替换为捕获版
+        const saved = window.Chart;
+        window.Chart = _Chart;
+        try {
+          // eslint-disable-next-line no-eval
+          eval(chartCodes.join('\n'));
+        } finally {
+          window.Chart = saved;
+        }
+      };
+      sandboxCapture();
+    } catch (scriptErr) {
+      console.warn('图表脚本执行失败（部分图表可能不显示）：', scriptErr);
+    }
+  }
+
+  // 6) 重置滚动到顶部
+  reportContent.scrollTo({ top: 0, behavior: 'auto' });
+}
+
+/* ============================================================
+ * 4. 导航：日期切换（按钮/选择器/键盘）
+ * ============================================================ */
 function updateNavButtons() {
   const idx = availableDates.indexOf(currentDate);
-  prevBtn.disabled = idx >= availableDates.length - 1; // 更老的
-  nextBtn.disabled = idx <= 0; // 更新的
+  prevBtn.disabled = idx >= availableDates.length - 1;
+  nextBtn.disabled = idx <= 0;
+  // 原生 date picker 限制可选范围为可用日期
+  if (availableDates.length) {
+    datePicker.min = availableDates[availableDates.length - 1];
+    datePicker.max = availableDates[0];
+  }
 }
-
 prevBtn.addEventListener('click', () => {
   const idx = availableDates.indexOf(currentDate);
   if (idx < availableDates.length - 1) loadDate(availableDates[idx + 1]);
@@ -484,26 +1404,93 @@ nextBtn.addEventListener('click', () => {
   if (idx > 0) loadDate(availableDates[idx - 1]);
 });
 todayBtn.addEventListener('click', () => loadDate(availableDates[0]));
-
 datePicker.addEventListener('change', (e) => {
-  loadDate(e.target.value);
+  const val = e.target.value;
+  if (availableDates.includes(val)) {
+    loadDate(val);
+  } else {
+    // 选了不存在的日期，找最近的一个
+    const nearest = availableDates.slice().sort((a, b) =>
+      Math.abs(new Date(a) - new Date(val)) - Math.abs(new Date(b) - new Date(val))
+    )[0];
+    if (nearest) {
+      alert(`该日期 (${val}) 暂无复盘报告，已跳转到最近日期：${nearest}`);
+      loadDate(nearest);
+    } else {
+      datePicker.value = currentDate;
+    }
+  }
 });
-
-// ====== 收起/展开时间线 ======
-toggleBtn.addEventListener('click', () => {
-  const collapsed = timeline.classList.toggle('collapsed');
-  toggleBtn.textContent = collapsed ? '展开 ▼' : '收起 ▲';
-});
-
-// ====== 键盘快捷键 ======
 document.addEventListener('keydown', (e) => {
-  if (e.target.tagName === 'INPUT') return;
-  if (e.key === 'ArrowLeft') prevBtn.click();
+  // 弹窗打开 / 焦点在输入框时不响应
+  if (tagModal.classList.contains('show')) return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowLeft')  prevBtn.click();
   if (e.key === 'ArrowRight') nextBtn.click();
+  if (e.key === 'Escape') closeTagModal();
 });
 
-// ====== 初始化 ======
+/* 侧边栏折叠 */
+collapseBtn.addEventListener('click', () => {
+  const collapsed = timelinePanel.classList.toggle('collapsed');
+  collapseBtn.textContent = collapsed ? '📚 复盘归档' : '«';
+  collapseBtn.title = collapsed ? '展开归档列表' : '收起归档列表';
+});
+
+/* ============================================================
+ * 5. 标签弹窗逻辑
+ * ============================================================ */
+function openTagModal(date) {
+  tagEditingDate = date;
+  const tag = getTag(date);
+  tagModalDate.textContent = date;
+  tagTextarea.value = tag ? tag.text : '';
+  // 删除按钮：只有有标签时才可用
+  tagDeleteBtn.style.visibility = tag ? 'visible' : 'hidden';
+  tagModal.classList.add('show');
+  setTimeout(() => tagTextarea.focus(), 60);
+}
+function closeTagModal() {
+  tagModal.classList.remove('show');
+  tagEditingDate = null;
+}
+tagModalClose.addEventListener('click', closeTagModal);
+tagCancelBtn.addEventListener('click', closeTagModal);
+tagModal.addEventListener('click', (e) => {
+  if (e.target === tagModal) closeTagModal();
+});
+
+tagSaveBtn.addEventListener('click', () => {
+  if (!tagEditingDate) return;
+  const text = tagTextarea.value;
+  setTag(tagEditingDate, text);
+  refreshCardStar(tagEditingDate);
+  closeTagModal();
+});
+
+tagDeleteBtn.addEventListener('click', () => {
+  if (!tagEditingDate) return;
+  if (!getTag(tagEditingDate)) { closeTagModal(); return; }
+  if (!confirm(`确定删除 ${tagEditingDate} 的标签备注吗？此操作不可恢复。`)) return;
+  deleteTag(tagEditingDate);
+  refreshCardStar(tagEditingDate);
+  closeTagModal();
+});
+
+/* Ctrl+S 保存弹窗 */
+document.addEventListener('keydown', (e) => {
+  if (!tagModal.classList.contains('show')) return;
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+    e.preventDefault();
+    tagSaveBtn.click();
+  }
+});
+
+/* ============================================================
+ * 6. 初始化
+ * ============================================================ */
 renderTimeline();
+updateNavButtons();
 loadDate(currentDate);
 </script>
 </body>
