@@ -260,6 +260,10 @@
   --color-error: var(--status-error-default);
   --color-error-soft: var(--status-error-surface-l1);
 
+  /* A-share convention: 红涨绿跌（专用色，不影响 tag/alert 语义色） */
+  --stock-up: #F65A5A;
+  --stock-down: #33C192;
+
   /* brand */
   --brand-green-100: #E5FFF2;
   --brand-green-200: #B4FDD9;

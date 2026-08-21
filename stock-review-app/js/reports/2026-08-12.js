@@ -19,7 +19,7 @@ window.REPORTS["2026-08-12"] = {
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div class="ds-statcard">
             <span class="ds-statcard__label">个股涨跌幅中位数</span>
-            <span class="ds-statcard__value" style="color:var(--status-success-default)">+0.83%</span>
+            <span class="ds-statcard__value" style="color:var(--stock-up)">+0.83%</span>
             <span class="ds-statcard__delta is-up">
               <i data-lucide="arrow-up" class="w-3 h-3"></i>
               <span>+1.46pp</span>
@@ -28,7 +28,7 @@ window.REPORTS["2026-08-12"] = {
           </div>
           <div class="ds-statcard">
             <span class="ds-statcard__label">沪深300加权指数</span>
-            <span class="ds-statcard__value" style="color:var(--status-success-default)">+0.65%</span>
+            <span class="ds-statcard__value" style="color:var(--stock-up)">+0.65%</span>
             <span class="ds-statcard__delta is-up">
               <i data-lucide="arrow-up" class="w-3 h-3"></i>
               <span>+0.49pp</span>
@@ -37,7 +37,7 @@ window.REPORTS["2026-08-12"] = {
           </div>
           <div class="ds-statcard">
             <span class="ds-statcard__label">指数失真剪刀差</span>
-            <span class="ds-statcard__value" style="color:var(--status-success-default)">+0.18%</span>
+            <span class="ds-statcard__value" style="color:var(--stock-up)">+0.18%</span>
             <span class="ds-statcard__delta is-up">
               <i data-lucide="arrow-up" class="w-3 h-3"></i>
               <span>+0.97pp</span>
@@ -46,14 +46,14 @@ window.REPORTS["2026-08-12"] = {
           </div>
           <div class="ds-statcard">
             <span class="ds-statcard__label">📊 持仓收益率</span>
-            <span class="ds-statcard__value" style="color:var(--status-success-default)">+0.68%</span>
+            <span class="ds-statcard__value" style="color:var(--stock-up)">+0.68%</span>
             <span class="ds-statcard__delta">
               <span class="ds-statcard__caption">今日持仓表现</span>
             </span>
           </div>
           <div class="ds-statcard">
             <span class="ds-statcard__label">超额收益（持仓−中位数）</span>
-            <span class="ds-statcard__value" style="color:var(--status-error-default)">-0.15%</span>
+            <span class="ds-statcard__value" style="color:var(--stock-down)">-0.15%</span>
             <span class="ds-statcard__delta is-down">
               <i data-lucide="arrow-down" class="w-3 h-3"></i>
               <span>跑输全市场中位数</span>
@@ -61,7 +61,7 @@ window.REPORTS["2026-08-12"] = {
           </div>
           <div class="ds-statcard">
             <span class="ds-statcard__label">赚钱效应评级</span>
-            <span class="ds-statcard__value" style="color:var(--status-success-default);font-size:var(--heading-sm-font-size)">🔥 强普涨</span>
+            <span class="ds-statcard__value" style="color:var(--stock-up);font-size:var(--heading-sm-font-size)">🔥 强普涨</span>
             <span class="ds-statcard__delta">
               <span class="ds-tag ds-tag--success">超3600只个股上涨</span>
               <span class="ds-statcard__caption">大幅回暖</span>
@@ -127,31 +127,31 @@ window.REPORTS["2026-08-12"] = {
               <tr>
                 <td><span class="ds-tag ds-tag--success">🥇 最强</span></td>
                 <td><b>科创50</b></td>
-                <td class="num" style="color:var(--status-success-default)"><b>+2.09%</b></td>
-                <td class="num" style="color:var(--status-error-default)">-0.36%</td>
-                <td class="num" style="color:var(--status-success-default)">+2.45pp</td>
+                <td class="num" style="color:var(--stock-up)"><b>+2.09%</b></td>
+                <td class="num" style="color:var(--stock-down)">-0.36%</td>
+                <td class="num" style="color:var(--stock-up)">+2.45pp</td>
                 <td class="num">约1,300亿(估算)</td>
               </tr>
               <tr>
                 <td><span class="ds-tag ds-tag--success">🥈 最强</span></td>
                 <td><b>创业板指</b></td>
-                <td class="num" style="color:var(--status-success-default)"><b>+1.73%</b></td>
-                <td class="num" style="color:var(--status-error-default)">-0.73%</td>
-                <td class="num" style="color:var(--status-success-default)">+2.46pp</td>
+                <td class="num" style="color:var(--stock-up)"><b>+1.73%</b></td>
+                <td class="num" style="color:var(--stock-down)">-0.73%</td>
+                <td class="num" style="color:var(--stock-up)">+2.46pp</td>
                 <td class="num">约4,400亿(估算)</td>
               </tr>
               <tr>
                 <td><span class="ds-tag ds-tag--success">🥉 最强</span></td>
                 <td><b>中证1000</b></td>
-                <td class="num" style="color:var(--status-success-default)"><b>+1.37%</b></td>
-                <td class="num" style="color:var(--status-success-default)">+0.71%</td>
-                <td class="num" style="color:var(--status-success-default)">+0.66pp</td>
+                <td class="num" style="color:var(--stock-up)"><b>+1.37%</b></td>
+                <td class="num" style="color:var(--stock-up)">+0.71%</td>
+                <td class="num" style="color:var(--stock-up)">+0.66pp</td>
                 <td class="num">—</td>
               </tr>
               <tr>
                 <td><span class="ds-tag ds-tag--danger">🥇 最弱</span></td>
                 <td><b>中证红利</b></td>
-                <td class="num" style="color:var(--status-error-default)"><b>-0.52%</b></td>
+                <td class="num" style="color:var(--stock-down)"><b>-0.52%</b></td>
                 <td class="num">—</td>
                 <td class="num">—</td>
                 <td class="num">—</td>
@@ -159,17 +159,17 @@ window.REPORTS["2026-08-12"] = {
               <tr>
                 <td><span class="ds-tag ds-tag--danger">🥈 最弱</span></td>
                 <td><b>恒生指数</b></td>
-                <td class="num" style="color:var(--status-error-default)"><b>-1.00%</b></td>
-                <td class="num" style="color:var(--status-success-default)">+1.05%</td>
-                <td class="num" style="color:var(--status-error-default)">-2.05pp</td>
+                <td class="num" style="color:var(--stock-down)"><b>-1.00%</b></td>
+                <td class="num" style="color:var(--stock-up)">+1.05%</td>
+                <td class="num" style="color:var(--stock-down)">-2.05pp</td>
                 <td class="num">约1,170亿港元</td>
               </tr>
               <tr>
                 <td><span class="ds-tag ds-tag--danger">🥉 最弱</span></td>
                 <td><b>北证50</b></td>
-                <td class="num" style="color:var(--status-success-default)">+0.27%</td>
-                <td class="num" style="color:var(--status-error-default)">-1.00%</td>
-                <td class="num" style="color:var(--status-success-default)">+1.27pp</td>
+                <td class="num" style="color:var(--stock-up)">+0.27%</td>
+                <td class="num" style="color:var(--stock-down)">-1.00%</td>
+                <td class="num" style="color:var(--stock-up)">+1.27pp</td>
                 <td class="num">—</td>
               </tr>
             </tbody>
@@ -189,17 +189,17 @@ window.REPORTS["2026-08-12"] = {
                 </tr>
               </thead>
               <tbody>
-                <tr><td>上证指数</td><td class="num" style="color:var(--status-success-default)"><b>+0.32%</b></td><td class="num">3,946.51</td><td class="num">9,861亿</td></tr>
-                <tr><td>深证成指</td><td class="num" style="color:var(--status-success-default)"><b>+1.25%</b></td><td class="num">14,438.07</td><td class="num">1.17万亿</td></tr>
-                <tr><td>沪深300</td><td class="num" style="color:var(--status-success-default)"><b>+0.65%</b></td><td class="num">4,693.88</td><td class="num">3,749亿</td></tr>
-                <tr><td>科创50</td><td class="num" style="color:var(--status-success-default)"><b>+2.09%</b></td><td class="num">1,745.15</td><td class="num">约1,300亿(估算)</td></tr>
-                <tr><td>创业板指</td><td class="num" style="color:var(--status-success-default)"><b>+1.73%</b></td><td class="num">3,610.65</td><td class="num">约4,400亿(估算)</td></tr>
-                <tr><td>中证500</td><td class="num" style="color:var(--status-success-default)"><b>+1.18%</b></td><td class="num">8,061.69</td><td class="num">—</td></tr>
-                <tr><td>中证1000</td><td class="num" style="color:var(--status-success-default)"><b>+1.37%</b></td><td class="num">7,803.32</td><td class="num">—</td></tr>
-                <tr><td>深证100</td><td class="num" style="color:var(--status-success-default)"><b>+1.10%</b></td><td class="num">6,229.31</td><td class="num">—</td></tr>
-                <tr><td>北证50</td><td class="num" style="color:var(--status-success-default)"><b>+0.27%</b></td><td class="num">1,116.26</td><td class="num">—</td></tr>
-                <tr><td>中证红利</td><td class="num" style="color:var(--status-error-default)"><b>-0.52%</b></td><td class="num">5,502.44</td><td class="num">—</td></tr>
-                <tr><td>同花顺全A(沪深京)</td><td class="num" style="color:var(--status-success-default)"><b>+0.96%</b></td><td class="num">1,883.137</td><td class="num">—</td></tr>
+                <tr><td>上证指数</td><td class="num" style="color:var(--stock-up)"><b>+0.32%</b></td><td class="num">3,946.51</td><td class="num">9,861亿</td></tr>
+                <tr><td>深证成指</td><td class="num" style="color:var(--stock-up)"><b>+1.25%</b></td><td class="num">14,438.07</td><td class="num">1.17万亿</td></tr>
+                <tr><td>沪深300</td><td class="num" style="color:var(--stock-up)"><b>+0.65%</b></td><td class="num">4,693.88</td><td class="num">3,749亿</td></tr>
+                <tr><td>科创50</td><td class="num" style="color:var(--stock-up)"><b>+2.09%</b></td><td class="num">1,745.15</td><td class="num">约1,300亿(估算)</td></tr>
+                <tr><td>创业板指</td><td class="num" style="color:var(--stock-up)"><b>+1.73%</b></td><td class="num">3,610.65</td><td class="num">约4,400亿(估算)</td></tr>
+                <tr><td>中证500</td><td class="num" style="color:var(--stock-up)"><b>+1.18%</b></td><td class="num">8,061.69</td><td class="num">—</td></tr>
+                <tr><td>中证1000</td><td class="num" style="color:var(--stock-up)"><b>+1.37%</b></td><td class="num">7,803.32</td><td class="num">—</td></tr>
+                <tr><td>深证100</td><td class="num" style="color:var(--stock-up)"><b>+1.10%</b></td><td class="num">6,229.31</td><td class="num">—</td></tr>
+                <tr><td>北证50</td><td class="num" style="color:var(--stock-up)"><b>+0.27%</b></td><td class="num">1,116.26</td><td class="num">—</td></tr>
+                <tr><td>中证红利</td><td class="num" style="color:var(--stock-down)"><b>-0.52%</b></td><td class="num">5,502.44</td><td class="num">—</td></tr>
+                <tr><td>同花顺全A(沪深京)</td><td class="num" style="color:var(--stock-up)"><b>+0.96%</b></td><td class="num">1,883.137</td><td class="num">—</td></tr>
               </tbody>
             </table>
           </div>
@@ -224,7 +224,7 @@ window.REPORTS["2026-08-12"] = {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="ds-statcard" style="text-align:center;padding:24px;">
             <span class="ds-statcard__label">沪深两市合计成交额</span>
-            <span class="ds-statcard__value" style="display:block;margin:10px 0;font-size:30px;color:var(--status-error-default);">2.15万亿</span>
+            <span class="ds-statcard__value" style="display:block;margin:10px 0;font-size:30px;color:var(--stock-down);">2.15万亿</span>
             <span class="ds-statcard__delta is-down">
               <i data-lucide="arrow-down" class="w-3 h-3"></i>
               <span>缩量约3,900亿(-15.4%)</span>
@@ -260,11 +260,11 @@ window.REPORTS["2026-08-12"] = {
             <p class="text-[var(--text-default)] font-medium text-sm">🚀 科技成长暴力反弹，资金从防御切回进攻</p>
             <ul class="ds-stack-12 text-sm text-[var(--text-secondary)] leading-relaxed">
               <li class="flex gap-3">
-                <i data-lucide="trending-up" class="w-4 h-4 flex-shrink-0 mt-0.5" style="color:var(--status-success-default)"></i>
+                <i data-lucide="trending-up" class="w-4 h-4 flex-shrink-0 mt-0.5" style="color:var(--stock-up)"></i>
                 <span><b>科技板块全线爆发</b>：科创50大涨 <span class="ds-tag ds-tag--success">+2.09%</span> 领涨全场，CPO概念涨超 <span class="ds-tag ds-tag--success">5%</span>，光纤、半导体、通信设备、算力租赁等板块涨幅居前。永鼎股份、通鼎互联、通宇通讯等多股涨停。</span>
               </li>
               <li class="flex gap-3">
-                <i data-lucide="trending-down" class="w-4 h-4 flex-shrink-0 mt-0.5" style="color:var(--status-error-default)"></i>
+                <i data-lucide="trending-down" class="w-4 h-4 flex-shrink-0 mt-0.5" style="color:var(--stock-down)"></i>
                 <span><b>防御板块遭资金抛弃</b>：中证红利 <span class="ds-tag ds-tag--danger">-0.52%</span> 成为唯一下跌的主要宽基指数，油气、煤炭等传统防御板块持续调整。资金从"防御避险"急转至"进攻成长"。</span>
               </li>
               <li class="flex gap-3">

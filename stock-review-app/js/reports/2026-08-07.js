@@ -22,7 +22,7 @@ window.REPORTS["2026-08-07"] = {
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div class="ds-statcard">
             <span class="ds-statcard__label">个股涨跌幅中位数</span>
-            <span class="ds-statcard__value" style="color:var(--status-success-default)">+0.11%</span>
+            <span class="ds-statcard__value" style="color:var(--stock-up)">+0.11%</span>
             <span class="ds-statcard__delta is-up">
               <i data-lucide="arrow-up" class="w-3 h-3"></i>
               <span>+0.05pp</span>
@@ -31,7 +31,7 @@ window.REPORTS["2026-08-07"] = {
           </div>
           <div class="ds-statcard">
             <span class="ds-statcard__label">沪深300加权指数</span>
-            <span class="ds-statcard__value" style="color:var(--status-success-default)">+0.83%</span>
+            <span class="ds-statcard__value" style="color:var(--stock-up)">+0.83%</span>
             <span class="ds-statcard__delta is-up">
               <i data-lucide="arrow-up" class="w-3 h-3"></i>
               <span>+0.98pp</span>
@@ -40,7 +40,7 @@ window.REPORTS["2026-08-07"] = {
           </div>
           <div class="ds-statcard">
             <span class="ds-statcard__label">指数失真剪刀差</span>
-            <span class="ds-statcard__value" style="color:var(--status-error-default)">-0.72%</span>
+            <span class="ds-statcard__value" style="color:var(--stock-down)">-0.72%</span>
             <span class="ds-statcard__delta is-down">
               <i data-lucide="arrow-down" class="w-3 h-3"></i>
               <span>-0.93pp</span>
@@ -102,49 +102,49 @@ window.REPORTS["2026-08-07"] = {
               <tr>
                 <td><span class="ds-tag ds-tag--success">🥇 最强</span></td>
                 <td>科创50</td>
-                <td class="num" style="color:var(--status-success-default)">+2.28%</td>
-                <td class="num" style="color:var(--status-success-default)">+0.45%</td>
-                <td class="num" style="color:var(--status-success-default)">+1.83pp</td>
+                <td class="num" style="color:var(--stock-up)">+2.28%</td>
+                <td class="num" style="color:var(--stock-up)">+0.45%</td>
+                <td class="num" style="color:var(--stock-up)">+1.83pp</td>
                 <td class="num">1,278亿</td>
               </tr>
               <tr>
                 <td><span class="ds-tag ds-tag--success">🥈 最强</span></td>
                 <td>深证100</td>
-                <td class="num" style="color:var(--status-success-default)">+1.22%</td>
-                <td class="num" style="color:var(--status-error-default)">-0.59%</td>
-                <td class="num" style="color:var(--status-success-default)">+1.81pp</td>
+                <td class="num" style="color:var(--stock-up)">+1.22%</td>
+                <td class="num" style="color:var(--stock-down)">-0.59%</td>
+                <td class="num" style="color:var(--stock-up)">+1.81pp</td>
                 <td class="num">未披露</td>
               </tr>
               <tr>
                 <td><span class="ds-tag ds-tag--success">🥉 最强</span></td>
                 <td>创业板50</td>
-                <td class="num" style="color:var(--status-success-default)">+0.88%</td>
-                <td class="num" style="color:var(--status-error-default)">-0.83%</td>
-                <td class="num" style="color:var(--status-success-default)">+1.71pp</td>
+                <td class="num" style="color:var(--stock-up)">+0.88%</td>
+                <td class="num" style="color:var(--stock-down)">-0.83%</td>
+                <td class="num" style="color:var(--stock-up)">+1.71pp</td>
                 <td class="num">未披露</td>
               </tr>
               <tr>
                 <td><span class="ds-tag ds-tag--danger">🥇 最弱</span></td>
                 <td>中证2000</td>
                 <td class="num">盘中跌1.26%后反弹</td>
-                <td class="num" style="color:var(--status-success-default)">+1.2%</td>
+                <td class="num" style="color:var(--stock-up)">+1.2%</td>
                 <td class="num">大幅震荡</td>
                 <td class="num">未披露</td>
               </tr>
               <tr>
                 <td><span class="ds-tag ds-tag--danger">🥈 最弱</span></td>
                 <td>北证50</td>
-                <td class="num" style="color:var(--status-error-default)">-0.02%</td>
-                <td class="num" style="color:var(--status-success-default)">+0.31%</td>
-                <td class="num" style="color:var(--status-error-default)">-0.33pp</td>
+                <td class="num" style="color:var(--stock-down)">-0.02%</td>
+                <td class="num" style="color:var(--stock-up)">+0.31%</td>
+                <td class="num" style="color:var(--stock-down)">-0.33pp</td>
                 <td class="num">108亿</td>
               </tr>
               <tr>
                 <td><span class="ds-tag ds-tag--danger">🥉 最弱</span></td>
                 <td>恒生指数</td>
-                <td class="num" style="color:var(--status-success-default)">+0.15%</td>
-                <td class="num" style="color:var(--status-error-default)">-1.49%</td>
-                <td class="num" style="color:var(--status-success-default)">+1.64pp</td>
+                <td class="num" style="color:var(--stock-up)">+0.15%</td>
+                <td class="num" style="color:var(--stock-down)">-1.49%</td>
+                <td class="num" style="color:var(--stock-up)">+1.64pp</td>
                 <td class="num">1,412亿港元</td>
               </tr>
             </tbody>
@@ -164,16 +164,16 @@ window.REPORTS["2026-08-07"] = {
                 </tr>
               </thead>
               <tbody>
-                <tr><td>沪深300</td><td class="num" style="color:var(--status-success-default)">+0.83%</td><td class="num">4,689.96</td><td class="num">4,711亿</td></tr>
-                <tr><td>上证50</td><td class="num" style="color:var(--status-success-default)">+0.80%</td><td class="num">2,943.39</td><td class="num">—</td></tr>
-                <tr><td>上证180</td><td class="num" style="color:var(--status-success-default)">+0.78%</td><td class="num">9,944.36</td><td class="num">—</td></tr>
-                <tr><td>深证成指</td><td class="num" style="color:var(--status-success-default)">+1.31%</td><td class="num">14,295.08</td><td class="num">9,060亿</td></tr>
-                <tr><td>创业板指</td><td class="num" style="color:var(--status-success-default)">+1.75%</td><td class="num">3,577.20</td><td class="num">4,470亿</td></tr>
-                <tr><td>中证500</td><td class="num" style="color:var(--status-success-default)">+1.15%</td><td class="num">7,919.52</td><td class="num">3,340亿</td></tr>
-                <tr><td>中证1000</td><td class="num" style="color:var(--status-success-default)">+1.13%</td><td class="num">7,615.18</td><td class="num">—</td></tr>
-                <tr><td>MSCI中国A50 CFD</td><td class="num" style="color:var(--status-success-default)">+0.50%</td><td class="num">2,793.38</td><td class="num">—</td></tr>
-                <tr><td>H股指数</td><td class="num" style="color:var(--status-success-default)">+0.06%</td><td class="num">8,503.78</td><td class="num">—</td></tr>
-                <tr><td>香港中小</td><td class="num" style="color:var(--status-success-default)">+0.54%</td><td class="num">2,321.92</td><td class="num">—</td></tr>
+                <tr><td>沪深300</td><td class="num" style="color:var(--stock-up)">+0.83%</td><td class="num">4,689.96</td><td class="num">4,711亿</td></tr>
+                <tr><td>上证50</td><td class="num" style="color:var(--stock-up)">+0.80%</td><td class="num">2,943.39</td><td class="num">—</td></tr>
+                <tr><td>上证180</td><td class="num" style="color:var(--stock-up)">+0.78%</td><td class="num">9,944.36</td><td class="num">—</td></tr>
+                <tr><td>深证成指</td><td class="num" style="color:var(--stock-up)">+1.31%</td><td class="num">14,295.08</td><td class="num">9,060亿</td></tr>
+                <tr><td>创业板指</td><td class="num" style="color:var(--stock-up)">+1.75%</td><td class="num">3,577.20</td><td class="num">4,470亿</td></tr>
+                <tr><td>中证500</td><td class="num" style="color:var(--stock-up)">+1.15%</td><td class="num">7,919.52</td><td class="num">3,340亿</td></tr>
+                <tr><td>中证1000</td><td class="num" style="color:var(--stock-up)">+1.13%</td><td class="num">7,615.18</td><td class="num">—</td></tr>
+                <tr><td>MSCI中国A50 CFD</td><td class="num" style="color:var(--stock-up)">+0.50%</td><td class="num">2,793.38</td><td class="num">—</td></tr>
+                <tr><td>H股指数</td><td class="num" style="color:var(--stock-up)">+0.06%</td><td class="num">8,503.78</td><td class="num">—</td></tr>
+                <tr><td>香港中小</td><td class="num" style="color:var(--stock-up)">+0.54%</td><td class="num">2,321.92</td><td class="num">—</td></tr>
               </tbody>
             </table>
           </div>
@@ -232,11 +232,11 @@ window.REPORTS["2026-08-07"] = {
             <p class="text-[var(--text-default)] font-medium text-sm">市场风格180°逆转</p>
             <ul class="ds-stack-12 text-sm text-[var(--text-secondary)] leading-relaxed">
               <li class="flex gap-3">
-                <i data-lucide="trending-up" class="w-4 h-4 flex-shrink-0 mt-0.5" style="color:var(--status-success-default)"></i>
+                <i data-lucide="trending-up" class="w-4 h-4 flex-shrink-0 mt-0.5" style="color:var(--stock-up)"></i>
                 <span><strong class="text-[var(--text-default)]">成长权重暴力反弹：</strong>科创50 <span class="ds-tag ds-tag--success">+2.28%</span> 领涨，创业板指 <span class="ds-tag ds-tag--success">+1.75%</span> 同步大涨，“昨日温和即今日最强”特征明显。</span>
               </li>
               <li class="flex gap-3">
-                <i data-lucide="trending-down" class="w-4 h-4 flex-shrink-0 mt-0.5" style="color:var(--status-error-default)"></i>
+                <i data-lucide="trending-down" class="w-4 h-4 flex-shrink-0 mt-0.5" style="color:var(--stock-down)"></i>
                 <span><strong class="text-[var(--text-default)]">小微盘遭资金抛弃：</strong>中证2000盘中一度跌 <span class="ds-tag ds-tag--danger">1.26%</span>，北证50微跌 <span class="ds-tag ds-tag--danger">-0.02%</span>，风格从“小盘唱戏”急转至“权重搭台”。</span>
               </li>
               <li class="flex gap-3">

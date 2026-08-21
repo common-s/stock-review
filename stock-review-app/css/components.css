@@ -164,8 +164,8 @@ code, samp, pre {
   font-size: var(--body-sm-font-size); line-height: var(--body-sm-line-height);
   font-weight: var(--font-weight-medium); font-variant-numeric: tabular-nums;
 }
-.ds-statcard__delta.is-up { color: var(--status-success-default); }
-.ds-statcard__delta.is-down { color: var(--status-error-default); }
+.ds-statcard__delta.is-up { color: var(--stock-up); }
+.ds-statcard__delta.is-down { color: var(--stock-down); }
 .ds-statcard__delta .ds-statcard__caption { color: var(--text-tertiary); font-weight: var(--font-weight-default); }
 .ds-statcard__grid { display: flex; flex-wrap: wrap; gap: var(--spacer-16); }
 

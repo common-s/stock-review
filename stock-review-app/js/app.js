@@ -60,8 +60,8 @@
       tickColor: tickColor,
       gridColor: gridColor,
       tooltipBg: tooltipBg,
-      green: cssVar("--status-success-default", "#33C192"),
-      red: cssVar("--status-error-default", "#F65A5A"),
+      green: cssVar("--stock-up", "#F65A5A"),
+      red: cssVar("--stock-down", "#33C192"),
       amber: cssVar("--status-warning-default", "#D27E24"),
       commonOptions: function () {
         return {
