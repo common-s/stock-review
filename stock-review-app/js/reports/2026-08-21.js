@@ -28,20 +28,20 @@ window.REPORTS["2026-08-21"] = {
             </span>
           </div>
           <div class="ds-statcard">
-            <span class="ds-statcard__label">沪深300 加权指数</span>
-            <span class="ds-statcard__value" style="color:var(--stock-up)">+0.57%</span>
-            <span class="ds-statcard__delta is-up">
-              <i data-lucide="arrow-up" class="w-3 h-3"></i>
-              <span>+0.48pp</span>
-              <span class="ds-statcard__caption">较前日</span>
-            </span>
-          </div>
-          <div class="ds-statcard">
             <span class="ds-statcard__label">持仓收益率</span>
             <span class="ds-statcard__value" style="color:var(--stock-down)">-0.30%</span>
             <span class="ds-statcard__delta is-down">
               <i data-lucide="arrow-down" class="w-3 h-3"></i>
               <span>-0.35pp</span>
+              <span class="ds-statcard__caption">较前日</span>
+            </span>
+          </div>
+          <div class="ds-statcard">
+            <span class="ds-statcard__label">沪深300 加权指数</span>
+            <span class="ds-statcard__value" style="color:var(--stock-up)">+0.57%</span>
+            <span class="ds-statcard__delta is-up">
+              <i data-lucide="arrow-up" class="w-3 h-3"></i>
+              <span>+0.48pp</span>
               <span class="ds-statcard__caption">较前日</span>
             </span>
           </div>

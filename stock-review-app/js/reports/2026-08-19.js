@@ -37,11 +37,12 @@ window.REPORTS["2026-08-19"] = {
             </span>
           </div>
           <div class="ds-statcard">
-            <span class="ds-statcard__label">沪深300加权指数</span>
-            <span class="ds-statcard__value" style="color:var(--stock-down)">-2.90%</span>
-            <span class="ds-statcard__delta">
-              <span>—</span>
-              <span class="ds-statcard__caption">较前日（前日待核实）</span>
+            <span class="ds-statcard__label">持仓收益率</span>
+            <span class="ds-statcard__value" style="color:var(--stock-down)">-5.63%</span>
+            <span class="ds-statcard__delta is-down">
+              <i data-lucide="arrow-down" class="w-3 h-3"></i>
+              <span>-5.71pp</span>
+              <span class="ds-statcard__caption">较前日</span>
             </span>
           </div>
           <div class="ds-statcard">
@@ -53,12 +54,11 @@ window.REPORTS["2026-08-19"] = {
             </span>
           </div>
           <div class="ds-statcard">
-            <span class="ds-statcard__label">持仓收益率</span>
-            <span class="ds-statcard__value" style="color:var(--stock-down)">-5.63%</span>
-            <span class="ds-statcard__delta is-down">
-              <i data-lucide="arrow-down" class="w-3 h-3"></i>
-              <span>-5.71pp</span>
-              <span class="ds-statcard__caption">较前日</span>
+            <span class="ds-statcard__label">沪深300加权指数</span>
+            <span class="ds-statcard__value" style="color:var(--stock-down)">-2.90%</span>
+            <span class="ds-statcard__delta">
+              <span>—</span>
+              <span class="ds-statcard__caption">较前日（前日待核实）</span>
             </span>
           </div>
           <div class="ds-statcard">

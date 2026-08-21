@@ -222,6 +222,12 @@ code, samp, pre {
   box-sizing: border-box;
   white-space: nowrap;
 }
+/* 数字列：横向等宽对齐，左右 padding 可比普通列更紧（不影响阅读） */
+.ds-table th.num,
+.ds-table td.num {
+  padding-left:  clamp(2px, 0.6cqw, calc(var(--spacer-8) - 2px));
+  padding-right: clamp(2px, 0.6cqw, calc(var(--spacer-8) - 2px));
+}
 /* 首列：指标名称列，允许换行 + 有字距，减少横向撑大 */
 .ds-table td:first-child,
 .ds-table th:first-child {
@@ -261,6 +267,12 @@ code, samp, pre {
   .ds-table th {
     font-size:      clamp(9px,  2.2cqw, 11px);
     letter-spacing: 0.02em;
+  }
+  /* 极窄时数字列左右 padding 再缩 1–2px 到 2/2 下限 */
+  .ds-table th.num,
+  .ds-table td.num {
+    padding-left:  clamp(1px, 0.5cqw, 3px);
+    padding-right: clamp(1px, 0.5cqw, 3px);
   }
   /* 解数据里的硬编码 Tailwind min-w，让表格按内容真实宽度 + 当前压缩结果为准 */
   .ds-table.min-w-\[720px\],

@@ -46,20 +46,20 @@ window.REPORTS = {
               </span>
             </div>
             <div class="ds-statcard">
-              <span class="ds-statcard__label">沪深300 加权指数</span>
-              <span class="ds-statcard__value" style="color:var(--stock-up)">+0.09%</span>
-              <span class="ds-statcard__delta is-up">
-                <i data-lucide="arrow-up" class="w-3 h-3"></i>
-                <span>+2.99pp</span>
-                <span class="ds-statcard__caption">较前日</span>
-              </span>
-            </div>
-            <div class="ds-statcard">
               <span class="ds-statcard__label">持仓收益率</span>
               <span class="ds-statcard__value" style="color:var(--stock-up)">+0.05%</span>
               <span class="ds-statcard__delta is-up">
                 <i data-lucide="arrow-up" class="w-3 h-3"></i>
                 <span>+5.68pp</span>
+                <span class="ds-statcard__caption">较前日</span>
+              </span>
+            </div>
+            <div class="ds-statcard">
+              <span class="ds-statcard__label">沪深300 加权指数</span>
+              <span class="ds-statcard__value" style="color:var(--stock-up)">+0.09%</span>
+              <span class="ds-statcard__delta is-up">
+                <i data-lucide="arrow-up" class="w-3 h-3"></i>
+                <span>+2.99pp</span>
                 <span class="ds-statcard__caption">较前日</span>
               </span>
             </div>

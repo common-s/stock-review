@@ -27,12 +27,10 @@ window.REPORTS["2026-08-12"] = {
             </span>
           </div>
           <div class="ds-statcard">
-            <span class="ds-statcard__label">沪深300加权指数</span>
-            <span class="ds-statcard__value" style="color:var(--stock-up)">+0.65%</span>
-            <span class="ds-statcard__delta is-up">
-              <i data-lucide="arrow-up" class="w-3 h-3"></i>
-              <span>+0.49pp</span>
-              <span class="ds-statcard__caption">vs 前日</span>
+            <span class="ds-statcard__label">📊 持仓收益率</span>
+            <span class="ds-statcard__value" style="color:var(--stock-up)">+0.68%</span>
+            <span class="ds-statcard__delta">
+              <span class="ds-statcard__caption">今日持仓表现</span>
             </span>
           </div>
           <div class="ds-statcard">
@@ -45,10 +43,12 @@ window.REPORTS["2026-08-12"] = {
             </span>
           </div>
           <div class="ds-statcard">
-            <span class="ds-statcard__label">📊 持仓收益率</span>
-            <span class="ds-statcard__value" style="color:var(--stock-up)">+0.68%</span>
-            <span class="ds-statcard__delta">
-              <span class="ds-statcard__caption">今日持仓表现</span>
+            <span class="ds-statcard__label">沪深300加权指数</span>
+            <span class="ds-statcard__value" style="color:var(--stock-up)">+0.65%</span>
+            <span class="ds-statcard__delta is-up">
+              <i data-lucide="arrow-up" class="w-3 h-3"></i>
+              <span>+0.49pp</span>
+              <span class="ds-statcard__caption">vs 前日</span>
             </span>
           </div>
           <div class="ds-statcard">
