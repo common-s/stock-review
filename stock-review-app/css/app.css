@@ -297,6 +297,32 @@
   .ds-card { padding: var(--spacer-16); }
   .ds-pagehead { padding: var(--spacer-16) 0; gap: var(--spacer-12); }
   .topbar__sub { display: none; }
+
+  /* ===== 移动端表格压缩：尽量免横滑，否则保留横滑回退 ===== */
+  .ds-table th, .ds-table td {
+    padding: 8px 6px !important;
+    font-size: 12px !important;
+    line-height: 1.35;
+  }
+  .ds-table th {
+    font-size: 11px !important;
+    letter-spacing: 0.02em;
+  }
+  /* 去除数据里硬编码的 Tailwind min-w，以真实内容宽度 + 压缩列距为准 */
+  .ds-table-wrap .ds-table.min-w-\[720px\],
+  .ds-table-wrap .ds-table.min-w-\[680px\] {
+    min-width: auto !important;
+  }
+  .ds-table-wrap.overflow-x-auto > table.ds-table {
+    /* 列压缩后仍需横滑时保持平滑可滑 */
+    min-width: max-content;
+  }
+  /* 指标列和长文本单元格允许换行，避免过宽 */
+  .ds-table td { white-space: normal; word-break: break-word; }
+  .ds-table td.num { white-space: nowrap; }
+  .ds-card .ds-statcard__grid {
+    gap: var(--spacer-12);
+  }
 }
 
 /* Reduced motion */
