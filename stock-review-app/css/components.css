@@ -176,28 +176,19 @@ code, samp, pre {
 .ds-statcard__delta .ds-statcard__caption { color: var(--text-tertiary); font-weight: var(--font-weight-default); }
 .ds-statcard__grid { display: flex; flex-wrap: wrap; gap: var(--spacer-16); }
 
-/* ===== Table ===== */
-.ds-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-.ds-table th, .ds-table td {
-  text-align: left;
-  padding: var(--spacer-12) var(--spacer-8);
-  border-bottom: 1px solid var(--border-neutral-l1);
-  font-size: var(--body-sm-font-size);
-  white-space: nowrap;
-}
-.ds-table td:first-child { white-space: normal; word-break: keep-all; }
-.ds-table th { color: var(--text-tertiary); font-weight: var(--font-weight-default, 400); font-size: var(--body-xs-font-size); letter-spacing: 0.04em; }
-.ds-table td { color: var(--text-default); }
-.ds-table tbody tr { transition: background-color .15s ease; }
-.ds-table tbody tr:hover { background: var(--bg-overlay-l1); }
-.ds-table tr:last-child td { border-bottom: none; }
-.ds-table td.num,
-.ds-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
-
+/* ===== Table =====
+ * 列间距 + 字号采用"容器查询 + clamp"做连续自适应：
+ *   - 宽容器（桌面）→ 标准间距（~15/10 px）+ 标准字号
+ *   - 容器越窄 → 线性压缩，有硬下限
+ *   - 压缩到下限仍溢出时，ds-table-wrap 的 overflow-x:auto 自动激活横滑
+ * 否则不会出现横滑条。
+ */
 .ds-table-wrap {
+  container-type: inline-size;
+  container-name: table-wrap;
   border: 1px solid var(--border-neutral-l1);
   border-radius: var(--radius-8);
-  overflow-x: auto;
+  overflow-x: auto;    /* 仅当压缩到下限仍溢出时才出现横滑 */
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
@@ -205,9 +196,77 @@ code, samp, pre {
   background: var(--bg-base-secondary);
   width: 100%;
   max-width: 100%;
+  box-sizing: border-box;
 }
 .ds-table-wrap::-webkit-scrollbar { height: 6px; }
 .ds-table-wrap::-webkit-scrollbar-thumb { background: var(--bg-overlay-l3); border-radius: 3px; }
-.ds-table-wrap > table { display: block; max-width: none; min-width: 0; width: max-content; }
-.ds-table-wrap > table.ds-table { min-width: 100%; width: 100%; }
-.ds-table-wrap.overflow-x-auto > table.ds-table { width: max-content; min-width: 100%; }
+
+.ds-table {
+  width: 100%;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  box-sizing: border-box;
+}
+
+/* 基础桌面端 / 宽容器：列间距与字号读取 tokens，保持"原来的标准" */
+.ds-table th,
+.ds-table td {
+  text-align: left;
+  padding:
+    clamp(6px, 1.6cqw, var(--spacer-12))
+    clamp(4px, 1.1cqw, var(--spacer-8));
+  border-bottom: 1px solid var(--border-neutral-l1);
+  font-size: clamp(11px, 1.6cqw, var(--body-sm-font-size));
+  line-height: 1.4;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+/* 首列：指标名称列，允许换行 + 有字距，减少横向撑大 */
+.ds-table td:first-child,
+.ds-table th:first-child {
+  white-space: normal;
+  word-break: keep-all;
+  hyphens: auto;
+}
+/* 数字列始终等宽对齐，不换行 */
+.ds-table td.num,
+.ds-table th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ds-table th {
+  color: var(--text-tertiary);
+  font-weight: var(--font-weight-default, 400);
+  font-size: clamp(10px, 1.4cqw, var(--body-xs-font-size));
+  letter-spacing: 0.04em;
+}
+.ds-table td { color: var(--text-default); }
+.ds-table tbody tr { transition: background-color .15s ease; }
+.ds-table tbody tr:hover { background: var(--bg-overlay-l1); }
+.ds-table tr:last-child td { border-bottom: none; }
+
+/* 容器极窄 (< 420px) 时，再加一道更激进的压缩（不依赖 !important，容器查询天然窄时才生效） */
+@container table-wrap (max-width: 420px) {
+  .ds-table th,
+  .ds-table td {
+    padding-top:    clamp(4px, 1.2cqw, 6px);
+    padding-bottom: clamp(4px, 1.2cqw, 6px);
+    padding-left:   clamp(3px, 0.9cqw, 5px);
+    padding-right:  clamp(3px, 0.9cqw, 5px);
+    font-size:      clamp(10px, 2.4cqw, 12px);
+  }
+  .ds-table th {
+    font-size:      clamp(9px,  2.2cqw, 11px);
+    letter-spacing: 0.02em;
+  }
+  /* 解数据里的硬编码 Tailwind min-w，让表格按内容真实宽度 + 当前压缩结果为准 */
+  .ds-table.min-w-\[720px\],
+  .ds-table.min-w-\[680px\] { min-width: 0 !important; }
+  /* 允许描述类 td 换行，数字列保持 nowrap */
+  .ds-table td { white-space: normal; word-break: break-word; }
+  .ds-table td.num,
+  .ds-table th.num { white-space: nowrap; }
+}
