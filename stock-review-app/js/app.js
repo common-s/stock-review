@@ -177,7 +177,7 @@
         '<div class="ds-pagehead__actions"><span class="ds-tag">' + escapeHtml(h.dateLabel) + "</span></div>" +
       "</header>";
 
-    html += '<div class="ds-stack-40">';
+    html += '<div class="report-body"><div class="ds-stack-40">';
     report.sections.forEach(function (s) {
       html +=
         '<section class="report__section ds-stack-24 reveal" id="sec-' + s.id + '">' +
@@ -194,6 +194,7 @@
         "<p>" + escapeHtml(report.footer.generatedAt) + "</p>" +
         "</footer>";
     }
+    html += "</div>";
 
     $report.innerHTML = html;
     refreshIcons();
