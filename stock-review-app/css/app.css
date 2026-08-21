@@ -362,3 +362,14 @@
 .report-body .ds-pagehead__title,
 .report-body .ds-pagehead__subtitle { /* 防错：总标题不在 report-body 内，无需缩放 */ }
 
+/* 第四节解读类列表：<strong>加粗副标题 断行 + 放大字号 */
+.report-body .ds-card .ds-stack-12 > li.flex > span > strong,
+.report-body .ds-card .ds-stack-12 > li.flex > span > strong[class*="text-"] {
+  display: block;
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 700;
+  color: var(--text-default);
+  margin-bottom: var(--spacer-6);
+}
+

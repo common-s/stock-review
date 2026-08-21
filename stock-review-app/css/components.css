@@ -63,8 +63,9 @@ code, samp, pre {
 .ds-pagehead__title {
   font-size: var(--heading-lg-font-size);
   line-height: var(--heading-lg-line-height);
-  font-weight: var(--font-weight-strong);
+  font-weight: 900;
   color: var(--text-default);
+  letter-spacing: -0.01em;
 }
 .ds-pagehead__subtitle {
   font-size: 30px;
@@ -123,8 +124,14 @@ code, samp, pre {
 .ds-alert--warning .ds-alert__icon { color: var(--status-warning-default); }
 .ds-alert--danger  .ds-alert__icon { color: var(--status-error-default); }
 .ds-alert--info    .ds-alert__icon { color: var(--status-primary-default); }
-.ds-alert__title { font-weight: var(--font-weight-medium, 500); margin-bottom: var(--spacer-4); }
-.ds-alert__desc { color: var(--text-secondary); font-size: var(--body-sm-font-size); }
+.ds-alert__title {
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: var(--font-weight-strong, 700);
+  margin-bottom: var(--spacer-8);
+  color: var(--text-default);
+}
+.ds-alert__desc { color: var(--text-secondary); font-size: var(--body-sm-font-size); display: block; }
 
 /* ===== Card ===== */
 .ds-card {
