@@ -67,9 +67,9 @@ code, samp, pre {
   color: var(--text-default);
 }
 .ds-pagehead__subtitle {
-  font-size: var(--body-sm-font-size);
-  line-height: var(--body-sm-line-height);
-  color: var(--text-tertiary);
+  font-size: 30px;
+  line-height: 1.3;
+  color: var(--text-default);
 }
 .ds-pagehead__actions { display: flex; align-items: center; gap: var(--spacer-8); flex-shrink: 0; }
 .ds-pagehead__btn {
