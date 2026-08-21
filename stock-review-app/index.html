@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A股收盘复盘归档 — 基于 Trae 深色设计系统，缩量普涨修复，医药黄金领衔，超跌中小盘弹性释放">
+  <title>A股收盘复盘 · 资料归档</title>
+
+  <!-- Tailwind v4 (browser build) — provides utility classes used by report markup (grid/gap/flex/spacing) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+  <!-- Lucide icons -->
+  <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+
+  <!-- Design system: tokens + components + app shell -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="min-h-screen font-sans antialiased">
+  <div class="app">
+    <!-- ===== Top bar ===== -->
+    <header class="topbar">
+      <button id="menuBtn" class="topbar__menu-btn" aria-label="打开日期列表">
+        <i data-lucide="menu" class="w-4 h-4"></i>
+      </button>
+      <div class="topbar__brand">
+        <span class="topbar__logo">
+          <i data-lucide="trending-up" class="w-4 h-4"></i>
+        </span>
+        <div>
+          <div class="topbar__title">A股收盘复盘</div>
+          <div class="topbar__sub">DAILY REVIEW ARCHIVE</div>
+        </div>
+      </div>
+      <div class="topbar__spacer"></div>
+      <div class="topbar__meta">
+        <span>当前</span>
+        <span id="activeDate" class="ds-tag ds-tag--brand">2026-08-20</span>
+        <button id="tagBtn" class="ds-pagehead__btn" title="为当前日期添加标记（右键日期卡片亦可）">
+          <i data-lucide="star" class="w-3 h-3"></i>
+          <span>标记</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== Sidebar: date timeline ===== -->
+    <aside id="sidebar" class="sidebar" aria-label="日期时间线">
+      <div class="sidebar__head">
+        <span class="sidebar__label">时间线</span>
+        <span id="sidebarCount" class="sidebar__count">— 篇</span>
+      </div>
+      <nav id="timeline" class="timeline"></nav>
+    </aside>
+
+    <!-- ===== Main: report panel ===== -->
+    <main class="main">
+      <nav id="toc" class="toc" aria-label="章节目录">
+        <span class="toc__label">目录</span>
+      </nav>
+      <article id="report" class="report"></article>
+    </main>
+  </div>
+
+  <!-- ===== Backdrop (mobile drawer) ===== -->
+  <div id="backdrop" class="backdrop"></div>
+
+  <!-- ===== Back to top ===== -->
+  <button id="toTop" class="to-top" aria-label="返回顶部">
+    <i data-lucide="arrow-up" class="w-4 h-4"></i>
+  </button>
+
+  <!-- ===== Tag editor dialog ===== -->
+  <div id="tagOverlay" class="dialog-overlay">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="tagDialogTitle">
+      <div class="dialog__head">
+        <div class="dialog__title" id="tagDialogTitle">为 <span id="tagDialogDate">—</span> 添加标记</div>
+        <button id="tagCancel" class="dialog__close" aria-label="关闭">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="dialog__body">
+        <p class="dialog__hint">标记后会在此日期卡片显示黄色星标，并替换副标题。留空保存可清除标记。</p>
+        <input id="tagInput" class="dialog__input" type="text" maxlength="24" placeholder="如：加仓 / 减仓 / 观察">
+        <div class="dialog__actions">
+          <button id="tagClear" class="btn btn--danger">清除</button>
+          <button id="tagSave" class="btn btn--primary">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App data + per-date reports + logic.
+       data.js defines window.DATES and window.REPORTS (with 2026-08-20 as the
+       reference report); each reports/*.js adds one more date to window.REPORTS.
+       app.js consumes the merged object. -->
+  <script src="js/data.js"></script>
+  <script src="js/reports/2026-08-19.js"></script>
+  <script src="js/reports/2026-08-18.js"></script>
+  <script src="js/reports/2026-08-17.js"></script>
+  <script src="js/reports/2026-08-14.js"></script>
+  <script src="js/reports/2026-08-13.js"></script>
+  <script src="js/reports/2026-08-12.js"></script>
+  <script src="js/reports/2026-08-11.js"></script>
+  <script src="js/reports/2026-08-10.js"></script>
+  <script src="js/reports/2026-08-07.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
