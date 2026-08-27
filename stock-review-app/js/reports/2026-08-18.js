@@ -95,9 +95,10 @@ window.REPORTS["2026-08-18"] = {
         </div>
       `
     },
+    { id: "profit", index: "02", title: "赚钱效应分析", html: `<div class="ds-profit__stack"><div class="ds-profit-rating"><div class="ds-profit-rating__icon-wrap">🧊</div><div class="ds-profit-rating__body"><div class="ds-profit-rating__title">弱普跌</div><div class="ds-profit-rating__chips"><span class="ds-tag ds-tag--warning">整体弱势</span></div></div><div class="ds-profit-rating__figure"><div class="ds-profit-rating__figure-num" style="color:var(--stock-up)">弱普跌</div><div class="ds-profit-rating__figure-label">评级</div></div></div><div class="ds-card"><h3 class="ds-card__title">个股涨跌热力指标</h3><div class="ds-profit-heatgrid"><div class="ds-heat-cell is-up"><div class="ds-heat-cell__head"><i data-lucide="trending-up"></i>上涨个股数</div><div class="ds-heat-cell__val">—</div></div><div class="ds-heat-cell is-down"><div class="ds-heat-cell__head"><i data-lucide="trending-down"></i>下跌个股数</div><div class="ds-heat-cell__val">—</div></div><div class="ds-heat-cell is-up"><div class="ds-heat-cell__head"><i data-lucide="flame"></i>涨停家数</div><div class="ds-heat-cell__val">—</div></div><div class="ds-heat-cell is-down"><div class="ds-heat-cell__head"><i data-lucide="snowflake"></i>跌停家数</div><div class="ds-heat-cell__val">—</div></div><div class="ds-heat-cell is-neu"><div class="ds-heat-cell__head"><i data-lucide="pie-chart"></i>上涨占比</div><div class="ds-heat-cell__val">—</div></div><div class="ds-heat-cell is-down"><div class="ds-heat-cell__head"><i data-lucide="gauge"></i>个股中位数</div><div class="ds-heat-cell__val">-0.48%</div><div class="ds-heat-cell__sub">全市场个股涨跌幅中位数</div></div></div></div><div class="ds-card"><h3 class="ds-card__title">个股 vs 权重（失真度对比）</h3><div class="ds-profit-distortion"><div class="ds-profit-distortion__col"><div class="ds-profit-distortion__vs">个 股</div><div class="ds-statcard"><span class="ds-statcard__label">个股涨跌幅中位数</span><span class="ds-statcard__value" style="color:var(--stock-down)">-0.48%</span></div></div><div class="ds-profit-distortion__scissor"><div class="lbl">指数失真剪刀差</div><div class="big" style="color:var(--text-default)">待计算</div></div><div class="ds-profit-distortion__col"><div class="ds-profit-distortion__vs">权 重</div><div class="ds-statcard"><span class="ds-statcard__label">沪深300 加权指数</span><span class="ds-statcard__value" style="color:var(--text-default)">待核实</span></div></div></div></div><div class="ds-card"><h3 class="ds-card__title">持仓 vs 市场（超额收益对比）</h3><div class="ds-profit-holding"><div class="ds-profit-distortion__col"><div class="ds-profit-distortion__vs">持 仓</div><div class="ds-statcard"><span class="ds-statcard__label">持仓收益率</span><span class="ds-statcard__value" style="color:var(--stock-up)">+0.08%</span></div></div><div class="ds-profit-holding__excess"><div class="lbl">超 额 收 益</div><div class="num" style="color:var(--stock-up)">+0.56%</div><span class="ds-tag ds-tag--success">跑赢市场</span><div class="ds-heat-cell__sub" style="text-align:center">跑赢市场（超额收益为正，持仓契合市场最强方向）</div></div><div class="ds-profit-distortion__col"><div class="ds-profit-distortion__vs">市 场</div><div class="ds-statcard"><span class="ds-statcard__label">全市场中位数</span><span class="ds-statcard__value" style="color:var(--stock-down)">-0.48%</span></div></div></div><div class="ds-profit-holding__advice is-up">💡 超额收益连续显著为正，持仓结构与市场最强方向高度契合，可考虑适度沿用当前结构。</div></div></div>` },
     {
       id: "style",
-      index: "02",
+      index: "03",
       title: "风格强弱排名",
       html: `
         <div class="ds-card">
@@ -214,7 +215,7 @@ window.REPORTS["2026-08-18"] = {
     },
     {
       id: "liquidity",
-      index: "03",
+      index: "04",
       title: "流动性异动警报",
       html: `
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -248,7 +249,7 @@ window.REPORTS["2026-08-18"] = {
     },
     {
       id: "interpretation",
-      index: "04",
+      index: "05",
       title: "今日行情简要解读",
       html: `
         <div class="ds-card">

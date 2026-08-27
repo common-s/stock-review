@@ -382,3 +382,200 @@
   margin-bottom: var(--spacer-6);
 }
 
+/* ============= Profit Analysis Section ============= */
+.report-body .ds-profit__stack { display: flex; flex-direction: column; gap: var(--spacer-16); }
+
+/* ------- Rating overview card ------- */
+.ds-profit-rating {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--spacer-16) var(--spacer-20);
+  align-items: center;
+  padding: clamp(16px, 2vw, 24px);
+  border-radius: var(--radius-12);
+  background: linear-gradient(135deg, var(--bg-overlay-l3) 0%, var(--bg-overlay-l1) 100%);
+  border: 1px solid var(--border-neutral-l1);
+}
+.ds-profit-rating__icon-wrap {
+  width: 56px; height: 56px; border-radius: var(--radius-12);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 32px; line-height: 1;
+  background: var(--bg-overlay-l3);
+  border: 1px solid var(--border-neutral-l2);
+  flex-shrink: 0;
+}
+.ds-profit-rating__body { display: flex; flex-direction: column; gap: var(--spacer-8); min-width: 0; }
+.ds-profit-rating__title {
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-default);
+  letter-spacing: -0.01em;
+}
+.ds-profit-rating__chips { display: flex; flex-wrap: wrap; gap: var(--spacer-8); align-items: center; }
+.ds-profit-rating__desc {
+  font-size: clamp(13px, 1.5vw, 15px);
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+.ds-profit-rating__figure {
+  display: flex; flex-direction: column; align-items: flex-end; gap: var(--spacer-6);
+  text-align: right; flex-shrink: 0;
+}
+.ds-profit-rating__figure-num {
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.ds-profit-rating__figure-label {
+  font-size: var(--body-xs-font-size);
+  color: var(--text-tertiary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+@media (max-width: 640px) {
+  .ds-profit-rating { grid-template-columns: 1fr; }
+  .ds-profit-rating__figure { align-items: flex-start; text-align: left; }
+  .ds-profit-rating__icon-wrap { width: 48px; height: 48px; font-size: 26px; }
+}
+
+/* ------- Heat grid card ------- */
+.ds-profit-heatgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacer-12);
+}
+.ds-heat-cell {
+  padding: clamp(12px, 1.6vw, 16px);
+  border-radius: var(--radius-10);
+  display: flex; flex-direction: column; gap: var(--spacer-6);
+  background: var(--bg-overlay-l1);
+  border: 1px solid var(--border-neutral-l1);
+  transition: background-color .2s ease, border-color .2s ease;
+}
+.ds-heat-cell:hover { background: var(--bg-overlay-l2); }
+.ds-heat-cell__head {
+  display: flex; align-items: center; gap: var(--spacer-6);
+  font-size: clamp(11px, 1.3vw, 13px);
+  color: var(--text-tertiary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.ds-heat-cell__head i { width: 14px; height: 14px; flex-shrink: 0; }
+.ds-heat-cell__val {
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.015em;
+}
+.ds-heat-cell.is-up   .ds-heat-cell__val { color: var(--stock-up); }
+.ds-heat-cell.is-down .ds-heat-cell__val { color: var(--stock-down); }
+.ds-heat-cell.is-warn .ds-heat-cell__val { color: var(--status-warning-default); }
+.ds-heat-cell.is-neu  .ds-heat-cell__val { color: var(--text-default); }
+.ds-heat-cell__sub {
+  font-size: clamp(10px, 1.15vw, 12px);
+  color: var(--text-tertiary);
+  line-height: 1.4;
+}
+@media (max-width: 640px) {
+  .ds-profit-heatgrid { grid-template-columns: repeat(2, 1fr); }
+  .ds-profit-heatgrid .ds-heat-cell:nth-last-child(1):nth-child(odd) { grid-column: 1 / -1; }
+}
+
+/* ------- Distortion (vs weights) card ------- */
+.ds-profit-distortion {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: var(--spacer-16);
+  align-items: stretch;
+}
+.ds-profit-distortion__col { display: flex; flex-direction: column; gap: var(--spacer-8); justify-content: center; }
+.ds-profit-distortion__divider {
+  width: 1px; background: var(--border-neutral-l1); align-self: stretch;
+}
+.ds-profit-distortion__vs {
+  align-self: center; justify-self: center;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: var(--spacer-10) var(--spacer-16);
+  border-radius: var(--radius-full);
+  font-size: 11px; letter-spacing: 0.08em; color: var(--text-tertiary);
+  background: var(--bg-overlay-l2); border: 1px solid var(--border-neutral-l2);
+  text-transform: uppercase;
+}
+.ds-profit-distortion .ds-statcard { margin: 0; }
+.ds-profit-distortion__scissor {
+  padding: var(--spacer-16);
+  border-radius: var(--radius-10);
+  display: flex; flex-direction: column; gap: var(--spacer-8);
+  align-items: center; justify-content: center;
+  text-align: center;
+  border: 1px dashed var(--border-neutral-l2);
+  background: var(--bg-overlay-l1);
+}
+.ds-profit-distortion__scissor .big {
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1; letter-spacing: -0.02em;
+}
+.ds-profit-distortion__scissor .lbl {
+  font-size: var(--body-xs-font-size);
+  color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+@media (max-width: 760px) {
+  .ds-profit-distortion { grid-template-columns: 1fr; }
+  .ds-profit-distortion__divider { width: 100%; height: 1px; }
+  .ds-profit-distortion__vs { padding: var(--spacer-6) var(--spacer-12); }
+}
+
+/* ------- Holding vs median card ------- */
+.ds-profit-holding {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--spacer-16);
+  align-items: center;
+}
+.ds-profit-holding__divider {
+  width: 1px; height: 100%; background: var(--border-neutral-l1);
+}
+.ds-profit-holding__excess {
+  display: flex; flex-direction: column; gap: var(--spacer-10); align-items: center; justify-content: center;
+  padding: var(--spacer-16);
+  border-radius: var(--radius-10);
+  text-align: center;
+  background: var(--bg-overlay-l1);
+  border: 1px solid var(--border-neutral-l1);
+}
+.ds-profit-holding__excess .num {
+  font-size: clamp(30px, 3vw, 38px);
+  font-weight: 900; letter-spacing: -0.02em; line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.ds-profit-holding__excess .lbl {
+  font-size: var(--body-xs-font-size); color: var(--text-tertiary);
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.ds-profit-holding__advice {
+  font-size: clamp(12px, 1.4vw, 14px);
+  color: var(--text-secondary);
+  line-height: 1.55;
+  padding: var(--spacer-12) var(--spacer-14);
+  margin-top: var(--spacer-12);
+  border-radius: var(--radius-8);
+  background: var(--bg-base-secondary);
+  border-left: 3px solid var(--border-neutral-l2);
+}
+.ds-profit-holding__advice.is-up   { border-left-color: var(--stock-up); }
+.ds-profit-holding__advice.is-down { border-left-color: var(--stock-down); }
+.ds-profit-holding__advice.is-flat { border-left-color: var(--status-warning-default); }
+@media (max-width: 760px) {
+  .ds-profit-holding { grid-template-columns: 1fr; }
+  .ds-profit-holding__divider { width: 100%; height: 1px; }
+}
+
+

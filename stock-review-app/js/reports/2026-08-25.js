@@ -138,9 +138,10 @@ window.REPORTS["2026-08-25"] = {
         </div>
       `
     },
+    { id: "profit", index: "02", title: "赚钱效应分析", html: `<div class="ds-profit__stack"><div class="ds-profit-rating"><div class="ds-profit-rating__icon-wrap">🔥</div><div class="ds-profit-rating__body"><div class="ds-profit-rating__title">强普涨</div><div class="ds-profit-rating__chips"><span class="ds-tag ds-tag--success">强势普涨</span><span class="ds-tag ds-tag--success">💡 个股强 · 剪刀差 +1.71%</span></div><p class="ds-profit-rating__desc">全市场 <b>4,200</b> 只个股上涨 · <b>1,100</b> 只下跌 · 上涨占比约 <b>79.2%</b> · <span style="color:var(--stock-up)">失真：个股跑赢权重 +1.71%，赚个股不赚指数</span></p></div><div class="ds-profit-rating__figure"><div class="ds-profit-rating__figure-num" style="color:var(--stock-up)">79.2%</div><div class="ds-profit-rating__figure-label">上涨占比</div></div></div><div class="ds-card"><h3 class="ds-card__title">个股涨跌热力指标</h3><div class="ds-profit-heatgrid"><div class="ds-heat-cell is-up"><div class="ds-heat-cell__head"><i data-lucide="trending-up"></i>上涨个股数</div><div class="ds-heat-cell__val">4,200</div></div><div class="ds-heat-cell is-down"><div class="ds-heat-cell__head"><i data-lucide="trending-down"></i>下跌个股数</div><div class="ds-heat-cell__val">1,100</div></div><div class="ds-heat-cell is-up"><div class="ds-heat-cell__head"><i data-lucide="flame"></i>涨停家数</div><div class="ds-heat-cell__val">—</div></div><div class="ds-heat-cell is-down"><div class="ds-heat-cell__head"><i data-lucide="snowflake"></i>跌停家数</div><div class="ds-heat-cell__val">—</div></div><div class="ds-heat-cell is-up"><div class="ds-heat-cell__head"><i data-lucide="pie-chart"></i>上涨占比</div><div class="ds-heat-cell__val">79.2%</div></div><div class="ds-heat-cell is-up"><div class="ds-heat-cell__head"><i data-lucide="gauge"></i>个股中位数</div><div class="ds-heat-cell__val">+1.47%</div><div class="ds-heat-cell__sub">全市场个股涨跌幅中位数</div></div></div></div><div class="ds-card"><h3 class="ds-card__title">个股 vs 权重（失真度对比）</h3><div class="ds-profit-distortion"><div class="ds-profit-distortion__col"><div class="ds-profit-distortion__vs">个 股</div><div class="ds-statcard"><span class="ds-statcard__label">个股涨跌幅中位数</span><span class="ds-statcard__value" style="color:var(--stock-up)">+1.47%</span></div></div><div class="ds-profit-distortion__scissor"><div class="lbl">指数失真剪刀差</div><div class="big" style="color:var(--stock-up)">+1.71%</div><span class="ds-tag ds-tag--success">个股强</span><div class="lbl" style="margin-top:8px;letter-spacing:0.02em;text-transform:none">个股跑赢权重 +1.71%，赚个股不赚指数</div></div><div class="ds-profit-distortion__col"><div class="ds-profit-distortion__vs">权 重</div><div class="ds-statcard"><span class="ds-statcard__label">沪深300 加权指数</span><span class="ds-statcard__value" style="color:var(--stock-down)">-0.24%</span></div></div></div></div><div class="ds-card"><h3 class="ds-card__title">持仓 vs 市场（超额收益对比）</h3><div class="ds-profit-holding"><div class="ds-profit-distortion__col"><div class="ds-profit-distortion__vs">持 仓</div><div class="ds-statcard"><span class="ds-statcard__label">持仓收益率</span><span class="ds-statcard__value" style="color:var(--stock-down)">-0.44%</span></div></div><div class="ds-profit-holding__excess"><div class="lbl">超 额 收 益</div><div class="num" style="color:var(--stock-down)">-1.91%</div><span class="ds-tag ds-tag--danger">跑输市场</span><div class="ds-heat-cell__sub" style="text-align:center">跑输市场（超额收益为负，持仓偏离市场主线）</div></div><div class="ds-profit-distortion__col"><div class="ds-profit-distortion__vs">市 场</div><div class="ds-statcard"><span class="ds-statcard__label">全市场中位数</span><span class="ds-statcard__value" style="color:var(--stock-up)">+1.47%</span></div></div></div><div class="ds-profit-holding__advice is-down">💡 超额收益持续为负，持仓明显跑输市场平均，建议紧急审视持仓结构，考虑向当前市场主线适度调整。</div></div></div>` },
     {
       id: "style",
-      index: "02",
+      index: "03",
       title: "风格强弱排名",
       html: `
         <div class="ds-table-wrap overflow-x-auto">
@@ -252,7 +253,7 @@ window.REPORTS["2026-08-25"] = {
     },
     {
       id: "liquidity",
-      index: "03",
+      index: "04",
       title: "流动性异动警报",
       html: `
         <div class="ds-alert ds-alert--warning">
@@ -303,7 +304,7 @@ window.REPORTS["2026-08-25"] = {
     },
     {
       id: "interpretation",
-      index: "04",
+      index: "05",
       title: "今日行情简要解读",
       html: `
         <div class="ds-card">
