@@ -8,6 +8,7 @@
  * vars in app.js) and returning a Chart.js config — keeps data self-contained.
  */
 window.DATES = [
+  { date: "2026-09-02", subtitle: "全线下挫 · 北证50独涨 · 军工逆势活跃" },
   { date: "2026-08-31", subtitle: "低开高走 · 八月红盘收官 · 传媒板块掀涨停潮" },
   { date: "2026-08-28", subtitle: "冲高回落 · 双创暴跌 · 昨日最强今日最弱" },
   { date: "2026-08-27", subtitle: "科创暴涨 · 半导体爆发 · 量价齐升" },
